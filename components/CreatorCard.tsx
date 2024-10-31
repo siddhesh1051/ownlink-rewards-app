@@ -10,6 +10,7 @@ import {
 } from "./ui/avatar";
 import { Tooltip, TooltipContent, TooltipText } from "./ui/tooltip";
 import { Button, ButtonText } from "./ui/button";
+import { Icon } from "./ui/icon";
 
 export default function Creatorcard({
   name,
@@ -30,16 +31,8 @@ export default function Creatorcard({
   };
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: 8,
-        borderRadius: 8,
-      }}
-    >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <View className="flex flex-row justify-between items-center p-2 rounded-lg">
+      <View className="flex flex-row justify-center items-center gap-4 ">
         <Avatar size="md">
           <AvatarFallbackText>Jane Doe</AvatarFallbackText>
           <AvatarImage
@@ -47,20 +40,20 @@ export default function Creatorcard({
               uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
             }}
           />
-          <AvatarBadge />
         </Avatar>
+        <Text className="font-medium text-lg">{name}</Text>
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View className="flex flex-row items-center">
         <Tooltip
           placement="top"
           trigger={(triggerProps) => {
             return (
               <TouchableOpacity onPress={copyOwnlink} style={{ padding: 8 }}>
                 {isCopying ? (
-                  <CheckIcon size={22} color="green" />
+                  <Icon as={CheckIcon} size="md" color="green" />
                 ) : (
-                  <CopyIcon size={22} />
+                  <Icon as={CopyIcon} size="md" />
                 )}
               </TouchableOpacity>
             );
@@ -74,12 +67,8 @@ export default function Creatorcard({
           placement="top"
           trigger={(triggerProps) => {
             return (
-              <TouchableOpacity onPress={copyOwnlink} style={{ padding: 8 }}>
-                {isCopying ? (
-                  <CheckIcon size={22} color="green" />
-                ) : (
-                  <CopyIcon size={22} />
-                )}
+              <TouchableOpacity onPress={() => {}} style={{ padding: 8 }}>
+                <Icon as={ChevronRight} size="md" />
               </TouchableOpacity>
             );
           }}

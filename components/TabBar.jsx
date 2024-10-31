@@ -51,31 +51,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
             label={label}
           />
         );
-
-        // return (
-        //   <TouchableOpacity
-        //     key={route.name}
-        //     style={styles.tabbarItem}
-        //     accessibilityRole="button"
-        //     accessibilityState={isFocused ? { selected: true } : {}}
-        //     accessibilityLabel={options.tabBarAccessibilityLabel}
-        //     testID={options.tabBarTestID}
-        //     onPress={onPress}
-        //     onLongPress={onLongPress}
-        //   >
-        //     {
-        //         icons[route.name]({
-        //             color: isFocused? primaryColor: greyColor
-        //         })
-        //     }
-        //     <Text style={{
-        //         color: isFocused ? primaryColor : greyColor,
-        //         fontSize: 11
-        //     }}>
-        //       {label}
-        //     </Text>
-        //   </TouchableOpacity>
-        // );
       })}
     </View>
   );
@@ -84,19 +59,25 @@ const TabBar = ({ state, descriptors, navigation }) => {
 const styles = StyleSheet.create({
   tabbar: {
     position: "absolute",
-    bottom: 25,
+    bottom: 0,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "white",
-    marginHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 25,
+    marginHorizontal: 0,
+    // paddingVertical: 15,
+    height: 70,
+    width: "100%",
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     borderCurve: "continuous",
     shadowColor: "black",
-    shadowOffset: { width: 0, height: 10 },
-    shadowRadius: 10,
-    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: -10 }, // Negative height for top shadow
+    shadowRadius: 40,
+    shadowOpacity: 0.8,
+    elevation: 10, // For Android
   },
 });
 

@@ -14,34 +14,106 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
-  const creatorsData = {
-    data: {
-      creators: [
-        {
-          name: "Siddhesh",
-          avatar: "https://link.to/avatar1",
-          username: "creator1",
-        },
-        {
-          name: "Pranav",
-          avatar: "https://link.to/avatar2",
-          username: "creator2",
-        },
-        // More dummy data
-      ],
+  const creatorsData = [
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
     },
-  };
-
-  useEffect(() => {
-    const results: Creator[] | any = creatorsData?.data?.creators?.filter(
-      (creator) =>
-        creator.name.toLowerCase().includes(searchInput.toLowerCase())
-    );
-    setSearchResults(results);
-  }, [searchInput]);
-
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    {
+      name: "Siddhesh",
+      avatar: "https://link.to/avatar1",
+      username: "creator1",
+    },
+    {
+      name: "Pranav",
+      avatar: "https://link.to/avatar2",
+      username: "creator2",
+    },
+    // More dummy data
+  ];
   return (
-    <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 12 }}>
+    <View
+      style={{
+        marginBottom: 75,
+      }}
+      className="flex-1 px-4 pt-3 flex gap-4"
+    >
       <View className="flex gap-2 relative justify-center items-center ">
         <Input
           variant="outline"
@@ -59,28 +131,21 @@ export default function Home() {
             onChangeText={(text) => setSearchInput(text)}
             type="text"
             placeholder="Search your favourite creator"
+            className="pl-2"
           />
         </Input>
       </View>
 
-      {searchResults?.length ? (
-        <ScrollView style={{ marginTop: 16 }}>
-          {searchResults.map((creator: Creator, index) => (
-            <Creatorcard
-              key={index}
-              name={creator.name}
-              avatar={creator.avatar}
-              username={creator.username}
-            />
-          ))}
-        </ScrollView>
-      ) : (
-        <View style={{ alignItems: "center", marginTop: 40 }}>
-          <Text style={{ fontSize: 18, fontWeight: "600", color: "#7a7a7a" }}>
-            No results found
-          </Text>
-        </View>
-      )}
+      <ScrollView>
+        {creatorsData.map((creator: Creator, index) => (
+          <Creatorcard
+            key={index}
+            name={creator.name}
+            avatar={creator.avatar}
+            username={creator.username}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
