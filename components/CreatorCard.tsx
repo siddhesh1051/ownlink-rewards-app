@@ -11,7 +11,15 @@ import {
 import { Tooltip, TooltipContent, TooltipText } from "./ui/tooltip";
 import { Button, ButtonText } from "./ui/button";
 
-export default function Creatorcard({ name, avatar, username }) {
+export default function Creatorcard({
+  name,
+  avatar,
+  username,
+}: {
+  name: string;
+  avatar: string;
+  username: string;
+}) {
   const [isCopying, setIsCopying] = useState(false);
 
   const copyOwnlink = () => {

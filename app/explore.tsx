@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, ScrollView } from "react-native";
-import { LucideSearch } from "lucide-react-native";
 import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
+
+interface Creator {
+  name: string;
+  avatar: string;
+  username: string;
+}
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState([]);
@@ -28,8 +33,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const results = creatorsData?.data?.creators?.filter((creator) =>
-      creator.name.toLowerCase().includes(searchInput.toLowerCase())
+    const results: Creator[] | any = creatorsData?.data?.creators?.filter(
+      (creator) =>
+        creator.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setSearchResults(results);
   }, [searchInput]);
@@ -59,7 +65,7 @@ export default function Home() {
 
       {searchResults?.length ? (
         <ScrollView style={{ marginTop: 16 }}>
-          {searchResults.map((creator, index) => (
+          {searchResults.map((creator: Creator, index) => (
             <Creatorcard
               key={index}
               name={creator.name}
