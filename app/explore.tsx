@@ -1,59 +1,80 @@
-import { View } from "react-native";
-import React from "react";
-import {
-  AlertDialog,
-  AlertDialogBackdrop,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogFooter,
-  AlertDialogBody,
-} from "@/components/ui/alert-dialog";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
-import { Text } from "@/components/ui/text";
+import { useEffect, useState } from "react";
+import { View, Text, TextInput, ScrollView } from "react-native";
+import { LucideSearch } from "lucide-react-native";
+import Creatorcard from "@/components/CreatorCard";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Search } from "lucide-react-native";
 
-const Explore = () => {
-  const [showAlertDialog, setShowAlertDialog] = React.useState(false);
-  const handleClose = () => setShowAlertDialog(false);
+export default function Home() {
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+
+  const creatorsData = {
+    data: {
+      creators: [
+        {
+          name: "Siddhesh",
+          avatar: "https://link.to/avatar1",
+          username: "creator1",
+        },
+        {
+          name: "Pranav",
+          avatar: "https://link.to/avatar2",
+          username: "creator2",
+        },
+        // More dummy data
+      ],
+    },
+  };
+
+  useEffect(() => {
+    const results = creatorsData?.data?.creators?.filter((creator) =>
+      creator.name.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setSearchResults(results);
+  }, [searchInput]);
+
   return (
-    <View>
-      <>
-        <Button onPress={() => setShowAlertDialog(true)}>
-          <ButtonText>Open Dialog</ButtonText>
-        </Button>
-        <AlertDialog isOpen={showAlertDialog} onClose={handleClose} size="md">
-          <AlertDialogBackdrop />
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <Heading className="text-typography-950 font-semibold" size="md">
-                Are you sure you want to delete this post?
-              </Heading>
-            </AlertDialogHeader>
-            <AlertDialogBody className="mt-3 mb-4">
-              <Text size="sm">
-                Deleting the post will remove it permanently and cannot be
-                undone. Please confirm if you want to proceed.
-              </Text>
-            </AlertDialogBody>
-            <AlertDialogFooter className="">
-              <Button
-                variant="outline"
-                action="secondary"
-                onPress={handleClose}
-                size="sm"
-              >
-                <ButtonText>Cancel</ButtonText>
-              </Button>
-              <Button size="sm" onPress={handleClose}>
-                <ButtonText>Delete</ButtonText>
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </>
+    <View style={{ flex: 1, paddingHorizontal: 16, paddingTop: 12 }}>
+      <View className="flex gap-2 relative justify-center items-center ">
+        <Input
+          variant="outline"
+          size="lg"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          className="pl-4 w-full"
+        >
+          <InputSlot>
+            <InputIcon as={Search}></InputIcon>
+          </InputSlot>
+          <InputField
+            value={searchInput}
+            onChangeText={(text) => setSearchInput(text)}
+            type="text"
+            placeholder="Search your favourite creator"
+          />
+        </Input>
+      </View>
+
+      {searchResults?.length ? (
+        <ScrollView style={{ marginTop: 16 }}>
+          {searchResults.map((creator, index) => (
+            <Creatorcard
+              key={index}
+              name={creator.name}
+              avatar={creator.avatar}
+              username={creator.username}
+            />
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={{ alignItems: "center", marginTop: 40 }}>
+          <Text style={{ fontSize: 18, fontWeight: "600", color: "#7a7a7a" }}>
+            No results found
+          </Text>
+        </View>
+      )}
     </View>
   );
-};
-
-export default Explore;
+}
