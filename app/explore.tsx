@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, ScrollView } from "react-native";
+import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
@@ -110,11 +110,14 @@ export default function Home() {
   return (
     <View
       style={{
-        marginBottom: 75,
+        marginBottom: 70,
       }}
-      className="flex-1 px-4 pt-3 flex gap-4"
+      className="flex-1  pt-3 flex gap-2"
     >
-      <View className="flex gap-2 relative justify-center items-center ">
+      <View
+        style={styles.rowWrapper}
+        className="flex gap-2 relative justify-center items-center px-4"
+      >
         <Input
           variant="outline"
           size="lg"
@@ -137,15 +140,70 @@ export default function Home() {
       </View>
 
       <ScrollView>
-        {creatorsData.map((creator: Creator, index) => (
-          <Creatorcard
-            key={index}
-            name={creator.name}
-            avatar={creator.avatar}
-            username={creator.username}
-          />
-        ))}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            {searchInput === "" ? "All Creators" : "Results"}
+          </Text>
+          <View style={styles.rowWrapper}>
+            {searchInput === "" ? (
+              creatorsData.map((creator: Creator, index) => (
+                <Creatorcard
+                  key={index}
+                  name={creator.name}
+                  avatar={creator.avatar}
+                  username={creator.username}
+                />
+              ))
+            ) : creatorsData.filter((creator: Creator) =>
+                creator.name.toLowerCase().includes(searchInput.toLowerCase())
+              ).length === 0 ? (
+              <Text>No results found</Text>
+            ) : (
+              creatorsData
+                .filter((creator: Creator) =>
+                  creator.name.toLowerCase().includes(searchInput.toLowerCase())
+                )
+                .map((creator: Creator, index) => (
+                  <Creatorcard
+                    key={index}
+                    name={creator.name}
+                    avatar={creator.avatar}
+                    username={creator.username}
+                  />
+                ))
+            )}
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  section: {
+    paddingTop: 8,
+  },
+  sectionTitle: {
+    marginVertical: 8,
+    marginHorizontal: 24,
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#a7a7a7",
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
+  },
+
+  rowWrapper: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: "#e3e3e3",
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    padding: 8,
+  },
+  parentContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+  },
+});

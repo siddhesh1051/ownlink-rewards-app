@@ -1,11 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text, } from "react-native";
 import React from "react";
-import { Switch } from "@/components/ui/switch";
 
 const Rewards = () => {
   return (
     <View>
-      <Switch size="md" isDisabled={false} />
+      <Text>Rewards</Text>
     </View>
   );
 };

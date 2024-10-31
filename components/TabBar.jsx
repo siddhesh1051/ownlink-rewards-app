@@ -3,8 +3,8 @@ import React from "react";
 import TabBarButton from "./TabBarButton";
 
 const TabBar = ({ state, descriptors, navigation }) => {
-  const primaryColor = "#A855F7";
-  const greyColor = "#737373";
+  const primaryColor = "#030712";
+  const greyColor = "#9ca3af";
   return (
     <View style={styles.tabbar}>
       {state.routes.map((route, index) => {
