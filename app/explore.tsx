@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";

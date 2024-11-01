@@ -1,15 +1,9 @@
 import { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { CheckIcon, CopyIcon, ChevronRight } from "lucide-react-native";
 import Toast from "react-native-toast-message";
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "./ui/avatar";
+import { Avatar, AvatarFallbackText, AvatarImage } from "./ui/avatar";
 import { Tooltip, TooltipContent, TooltipText } from "./ui/tooltip";
-import { Button, ButtonText } from "./ui/button";
 import { Icon } from "./ui/icon";
 
 export default function Creatorcard({
