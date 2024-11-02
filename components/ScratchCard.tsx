@@ -17,6 +17,12 @@ type Props = {
   image: AnimatedProp<SkImage | null>;
   children?: React.ReactNode;
   setIsModalOpen: (value: boolean) => void;
+  scratchThreshold?: number; // Percentage of area that needs to be scratched (0-100)
+};
+
+type Point = {
+  x: number;
+  y: number;
 };
 
 export const ScratchCard: React.FC<Props> = ({
@@ -24,23 +30,73 @@ export const ScratchCard: React.FC<Props> = ({
   children,
   image,
   setIsModalOpen,
+  scratchThreshold = 60, // Default to 60% if not specified
 }) => {
   const [[width, height], setSize] = useState([0, 0]);
   const [isScratched, setScratched] = useState(false);
   const [isMove, setMove] = useState(false);
   const path = useRef(Skia.Path.Make());
+  const points = useRef<Point[]>([]);
+  const gridSize = 20; // Size of each grid cell for coverage calculation
+  const strokeWidth = 50;
 
-  const handleTouchEnd = () => {
-    if (isMove) {
+  const calculateCoverage = () => {
+    if (!width || !height) return 0;
+
+    // Create a grid to track scratched areas
+    const rows = Math.ceil(height / gridSize);
+    const cols = Math.ceil(width / gridSize);
+    const grid = Array(rows)
+      .fill(0)
+      .map(() => Array(cols).fill(false));
+
+    // Mark grid cells as scratched based on stored points
+    points.current.forEach((point) => {
+      const radius = strokeWidth / 2;
+
+      // Calculate grid cells affected by this point's radius
+      const startRow = Math.max(0, Math.floor((point.y - radius) / gridSize));
+      const endRow = Math.min(
+        rows - 1,
+        Math.floor((point.y + radius) / gridSize)
+      );
+      const startCol = Math.max(0, Math.floor((point.x - radius) / gridSize));
+      const endCol = Math.min(
+        cols - 1,
+        Math.floor((point.x + radius) / gridSize)
+      );
+
+      // Mark cells as scratched
+      for (let r = startRow; r <= endRow; r++) {
+        for (let c = startCol; c <= endCol; c++) {
+          grid[r][c] = true;
+        }
+      }
+    });
+
+    // Calculate percentage of grid cells that are scratched
+    const totalCells = rows * cols;
+    const scratchedCells = grid.flat().filter((cell) => cell).length;
+    return (scratchedCells / totalCells) * 100;
+  };
+
+  const handleScratch = (x: number, y: number) => {
+    points.current.push({ x, y });
+
+    // Check coverage and trigger completion if threshold is met
+    const coverage = calculateCoverage();
+    if (coverage >= scratchThreshold && !isScratched) {
       setScratched(true);
       handleCloseModalAfterDelay(1000);
     }
   };
+
   const handleCloseModalAfterDelay = (delay: number) => {
     setTimeout(() => {
       setIsModalOpen(false);
     }, delay);
   };
+
   return (
     <View
       onLayout={(e) => {
@@ -55,12 +111,13 @@ export const ScratchCard: React.FC<Props> = ({
             style={styles.canvas}
             onTouchStart={({ nativeEvent }) => {
               path.current.moveTo(nativeEvent.locationX, nativeEvent.locationY);
+              handleScratch(nativeEvent.locationX, nativeEvent.locationY);
             }}
             onTouchMove={({ nativeEvent }) => {
               setMove(true);
               path.current.lineTo(nativeEvent.locationX, nativeEvent.locationY);
+              handleScratch(nativeEvent.locationX, nativeEvent.locationY);
             }}
-            onTouchEnd={handleTouchEnd}
           >
             <Mask
               mode="luminance"
@@ -73,7 +130,7 @@ export const ScratchCard: React.FC<Props> = ({
                     style="stroke"
                     strokeJoin="round"
                     strokeCap="round"
-                    strokeWidth={50}
+                    strokeWidth={strokeWidth}
                   />
                 </Group>
               }

@@ -22,6 +22,7 @@ const AnimationScratchCard = ({
         style={styles.scratchCard}
         image={image}
         setIsModalOpen={setIsModalOpen}
+        scratchThreshold={75}
       >
         <View style={styles.card}>
           <Image
