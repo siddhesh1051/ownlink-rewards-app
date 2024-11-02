@@ -5,7 +5,11 @@ import { useImage } from "@shopify/react-native-skia";
 import { HStack } from "./ui/hstack";
 import { FontAwesome6 } from "@expo/vector-icons";
 
-const AnimationScratchCard = () => {
+const AnimationScratchCard = ({
+  setIsModalOpen,
+}: {
+  setIsModalOpen: (value: boolean) => void;
+}) => {
   const image = useImage(require("../assets/scratch_foreground.png"));
 
   if (!image) {
@@ -14,7 +18,11 @@ const AnimationScratchCard = () => {
 
   return (
     <View style={styles.cardContainer}>
-      <ScratchCard style={styles.scratchCard} image={image}>
+      <ScratchCard
+        style={styles.scratchCard}
+        image={image}
+        setIsModalOpen={setIsModalOpen}
+      >
         <View style={styles.card}>
           <Image
             source={require("../assets/confetti.png")}
@@ -52,8 +60,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 16,
-    borderColor: "#f3f3f3",
-    borderWidth: 2,
+    // borderColor: "#f3f3f3",
+    // borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
     display: "flex",

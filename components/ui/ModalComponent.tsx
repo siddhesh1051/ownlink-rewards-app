@@ -31,44 +31,40 @@ const ModalComponent = ({
       }}
       size="lg"
     >
-      <ModalBackdrop />
-      <ModalContent>
+      <ModalBackdrop
+        animate={{
+          opacity: 0.8,
+        }}
+      />
+      <ModalContent
+        style={{
+          backgroundColor: "transparent",
+          borderWidth: 0,
+        }}
+      >
         <ModalHeader
           style={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: "flex-end",
+            paddingRight: 16,
           }}
         >
-          <Heading size="xl">Scratch To Win</Heading>
+          <ModalCloseButton
+            onPress={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            <Icon
+              as={CloseIcon}
+              size="md"
+              className="stroke-background-50 group-hover:stroke-background-700 group-active:stroke-background-900 group-focus-visible:stroke-background-900"
+            />
+          </ModalCloseButton>
         </ModalHeader>
+
         <ModalBody className="py-4">
-          <AnimationScratchCard />
+          <AnimationScratchCard setIsModalOpen={setIsModalOpen} />
         </ModalBody>
-        <ModalFooter
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            variant="outline"
-            action="secondary"
-            onPress={() => {
-              setIsModalOpen(false);
-            }}
-          >
-            <ButtonText>Cancel</ButtonText>
-          </Button>
-          <Button
-            onPress={() => {
-              setIsModalOpen(false);
-            }}
-          >
-            <ButtonText>Auto Scratch</ButtonText>
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

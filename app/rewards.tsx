@@ -80,16 +80,6 @@ export default function Rewards() {
                       className: "",
                     }}
                   >
-                    {/* <Text className="text-gray-900 text-lg font-bold">
-              Scratch Card {index + 1}
-            </Text>
-            <Text className="text-gray-500 text-sm">
-              Scratch & Win upto 1000 points
-            </Text> */}
-                    {/* <ScratchCard /> */}
-                    {/* <Button onPress={() => setIsModalOpen(true)}>
-                      <ButtonText>Show Modal</ButtonText>
-                    </Button> */}
                     <TouchableOpacity onPress={() => setIsModalOpen(true)}>
                       <Image
                         source={require("../assets/scratch_foreground.png")}

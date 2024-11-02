@@ -16,9 +16,15 @@ type Props = {
   style: StyleProp<ViewStyle>;
   image: AnimatedProp<SkImage | null>;
   children?: React.ReactNode;
+  setIsModalOpen: (value: boolean) => void;
 };
 
-export const ScratchCard: React.FC<Props> = ({ style, children, image }) => {
+export const ScratchCard: React.FC<Props> = ({
+  style,
+  children,
+  image,
+  setIsModalOpen,
+}) => {
   const [[width, height], setSize] = useState([0, 0]);
   const [isScratched, setScratched] = useState(false);
   const [isMove, setMove] = useState(false);
@@ -27,7 +33,13 @@ export const ScratchCard: React.FC<Props> = ({ style, children, image }) => {
   const handleTouchEnd = () => {
     if (isMove) {
       setScratched(true);
+      handleCloseModalAfterDelay(1000);
     }
+  };
+  const handleCloseModalAfterDelay = (delay: number) => {
+    setTimeout(() => {
+      setIsModalOpen(false);
+    }, delay);
   };
   return (
     <View
