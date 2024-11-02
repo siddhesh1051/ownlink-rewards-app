@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
+import Toast from "react-native-toast-message";
 import TabBar from "@/components/TabBar";
 
 // import TabBar from "@/components/TabBar";
@@ -41,6 +42,7 @@ export default function RootLayout() {
           }}
         />
       </Tabs>
+      <Toast />
     </GluestackUIProvider>
   );
 }

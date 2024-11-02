@@ -82,7 +82,7 @@ export default function Rewards() {
                   >
                     <TouchableOpacity onPress={() => setIsModalOpen(true)}>
                       <Image
-                        source={require("../assets/scratch_foreground.png")}
+                        source={require("../../assets/scratch_foreground.png")}
                         style={{ width: "100%", height: 150, borderRadius: 10 }}
                       />
                     </TouchableOpacity>
