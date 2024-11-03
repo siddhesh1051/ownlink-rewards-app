@@ -16,6 +16,11 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+      "package": "com.ownlink.rewards",
+      "config": {
+        "useCleartextTraffic": true
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

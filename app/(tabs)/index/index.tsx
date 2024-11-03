@@ -3,31 +3,50 @@ import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
+import axios from "axios";
 
 interface Creator {
   name: string;
-  avatar: string;
+  profilePic: string;
   username: string;
 }
 
 export default function Dashboard() {
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [allCreators, setAllCreators] = useState([]);
+
+  useEffect(() => {
+    const getAllCreators = async () => {
+      console.log("useEffect called");
+      try {
+        const creators = await axios.get(
+          "https://2cb5-2409-40c2-600b-c9a9-1835-4478-28b1-888d.ngrok-free.app/api/getallcreators"
+        );
+        console.log("All Creators", creators.data);
+
+        setAllCreators(creators.data.users);
+      } catch (er: any) {
+        console.log("Error fetching creators", er);
+      }
+    };
+    getAllCreators();
+  }, []);
 
   const feauturedCreators = [
     {
       name: "Featured 1",
-      avatar: "https://link.to/avatar1",
+      profilePic: "https://link.to/avatar1",
       username: "creator1",
     },
     {
       name: "Feautured 2",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "creator2",
     },
     {
       name: "Feautured 2",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "creator3",
     },
     // More dummy data
@@ -35,42 +54,42 @@ export default function Dashboard() {
   const popularCreators = [
     {
       name: "Popular 1",
-      avatar: "https://link.to/avatar1",
+      profilePic: "https://link.to/avatar1",
       username: "pcreator1",
     },
     {
       name: "Popular 2",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator2",
     },
     {
       name: "Popular 2",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator3",
     },
     {
       name: "Popular 4",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator4",
     },
     {
       name: "Popular 5",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator5",
     },
     {
       name: "Popular 2",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator3",
     },
     {
       name: "Popular 4",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator4",
     },
     {
       name: "Popular 5",
-      avatar: "https://link.to/avatar2",
+      profilePic: "https://link.to/avatar2",
       username: "pcreator5",
     },
     // More dummy data
@@ -112,12 +131,12 @@ export default function Dashboard() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Featured Creators</Text>
           <View style={styles.rowWrapper}>
-            {feauturedCreators?.length !== 0 ? (
-              feauturedCreators.map((creator: Creator, index) => (
+            {allCreators?.length !== 0 ? (
+              allCreators.map((creator: Creator, index) => (
                 <Creatorcard
                   key={index}
                   name={creator.name}
-                  avatar={creator.avatar}
+                  avatar={creator.profilePic}
                   username={creator.username}
                 />
               ))
@@ -136,7 +155,7 @@ export default function Dashboard() {
                 <Creatorcard
                   key={index}
                   name={creator.name}
-                  avatar={creator.avatar}
+                  avatar={creator.profilePic}
                   username={creator.username}
                 />
               ))
