@@ -1,112 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
+import axios from "axios";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Creator {
   name: string;
-  avatar: string;
+  profilePic: string;
   username: string;
 }
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [isAllCreatorsLoading, setIsAllCreatorsLoading] = useState(false);
+  const [allCreators, setAllCreators] = useState([]);
 
-  const creatorsData = [
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Siddhesh",
-      avatar: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Pranav",
-      avatar: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    // More dummy data
-  ];
+  useEffect(() => {
+    const getAllCreators = async () => {
+      try {
+        setIsAllCreatorsLoading(true);
+        const creators = await axios.get(
+          "https://eaa0-2409-40c2-600b-c9a9-5dba-f215-4047-1704.ngrok-free.app/api/getvalidcreators"
+        );
+
+        setAllCreators(creators.data.users);
+      } catch (er: any) {
+        console.log("Error fetching creators", er);
+      } finally {
+        setIsAllCreatorsLoading(false);
+      }
+    };
+    getAllCreators();
+  }, []);
+
   return (
     <View
       style={{
@@ -145,21 +74,23 @@ export default function Home() {
             {searchInput === "" ? "All Creators" : "Results"}
           </Text>
           <View style={styles.rowWrapper}>
-            {searchInput === "" ? (
-              creatorsData.map((creator: Creator, index) => (
+            {isAllCreatorsLoading ? (
+              <Spinner size="large" color={"black"} />
+            ) : searchInput === "" ? (
+              allCreators.map((creator: Creator, index) => (
                 <Creatorcard
                   key={index}
                   name={creator.name}
-                  avatar={creator.avatar}
+                  avatar={creator.profilePic}
                   username={creator.username}
                 />
               ))
-            ) : creatorsData.filter((creator: Creator) =>
+            ) : allCreators.filter((creator: Creator) =>
                 creator.name.toLowerCase().includes(searchInput.toLowerCase())
               ).length === 0 ? (
               <Text>No results found</Text>
             ) : (
-              creatorsData
+              allCreators
                 .filter((creator: Creator) =>
                   creator.name.toLowerCase().includes(searchInput.toLowerCase())
                 )
@@ -167,7 +98,7 @@ export default function Home() {
                   <Creatorcard
                     key={index}
                     name={creator.name}
-                    avatar={creator.avatar}
+                    avatar={creator.profilePic}
                     username={creator.username}
                   />
                 ))

@@ -4,6 +4,7 @@ import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
 import axios from "axios";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Creator {
   name: string;
@@ -14,86 +15,26 @@ interface Creator {
 export default function Dashboard() {
   // const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [isAllCreatorsLoading, setIsAllCreatorsLoading] = useState(false);
   const [allCreators, setAllCreators] = useState([]);
 
   useEffect(() => {
     const getAllCreators = async () => {
-      console.log("useEffect called");
       try {
+        setIsAllCreatorsLoading(true);
         const creators = await axios.get(
-          "https://2cb5-2409-40c2-600b-c9a9-1835-4478-28b1-888d.ngrok-free.app/api/getallcreators"
+          "https://eaa0-2409-40c2-600b-c9a9-5dba-f215-4047-1704.ngrok-free.app/api/getvalidcreators"
         );
-        console.log("All Creators", creators.data);
 
         setAllCreators(creators.data.users);
       } catch (er: any) {
         console.log("Error fetching creators", er);
+      } finally {
+        setIsAllCreatorsLoading(false);
       }
     };
     getAllCreators();
   }, []);
-
-  const feauturedCreators = [
-    {
-      name: "Featured 1",
-      profilePic: "https://link.to/avatar1",
-      username: "creator1",
-    },
-    {
-      name: "Feautured 2",
-      profilePic: "https://link.to/avatar2",
-      username: "creator2",
-    },
-    {
-      name: "Feautured 2",
-      profilePic: "https://link.to/avatar2",
-      username: "creator3",
-    },
-    // More dummy data
-  ];
-  const popularCreators = [
-    {
-      name: "Popular 1",
-      profilePic: "https://link.to/avatar1",
-      username: "pcreator1",
-    },
-    {
-      name: "Popular 2",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator2",
-    },
-    {
-      name: "Popular 2",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator3",
-    },
-    {
-      name: "Popular 4",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator4",
-    },
-    {
-      name: "Popular 5",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator5",
-    },
-    {
-      name: "Popular 2",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator3",
-    },
-    {
-      name: "Popular 4",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator4",
-    },
-    {
-      name: "Popular 5",
-      profilePic: "https://link.to/avatar2",
-      username: "pcreator5",
-    },
-    // More dummy data
-  ];
 
   return (
     <View
@@ -131,15 +72,19 @@ export default function Dashboard() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Featured Creators</Text>
           <View style={styles.rowWrapper}>
-            {allCreators?.length !== 0 ? (
-              allCreators.map((creator: Creator, index) => (
-                <Creatorcard
-                  key={index}
-                  name={creator.name}
-                  avatar={creator.profilePic}
-                  username={creator.username}
-                />
-              ))
+            {isAllCreatorsLoading ? (
+              <Spinner size="large" color={"black"} />
+            ) : allCreators?.length !== 0 ? (
+              allCreators
+                .slice(0, 3)
+                .map((creator: Creator, index) => (
+                  <Creatorcard
+                    key={index}
+                    name={creator.name}
+                    avatar={creator.profilePic}
+                    username={creator.username}
+                  />
+                ))
             ) : (
               <View>
                 <Text>No results found</Text>
@@ -150,15 +95,19 @@ export default function Dashboard() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Popular Creators</Text>
           <View style={styles.rowWrapper}>
-            {popularCreators?.length !== 0 ? (
-              popularCreators.map((creator: Creator, index) => (
-                <Creatorcard
-                  key={index}
-                  name={creator.name}
-                  avatar={creator.profilePic}
-                  username={creator.username}
-                />
-              ))
+            {isAllCreatorsLoading ? (
+              <Spinner size="large" color={"black"} />
+            ) : allCreators?.length !== 0 ? (
+              allCreators
+                .slice(4, 13)
+                .map((creator: Creator, index) => (
+                  <Creatorcard
+                    key={index}
+                    name={creator.name}
+                    avatar={creator.profilePic}
+                    username={creator.username}
+                  />
+                ))
             ) : (
               <View>
                 <Text>No results found</Text>
