@@ -23,7 +23,7 @@ export default function Dashboard() {
       try {
         setIsAllCreatorsLoading(true);
         const creators = await axios.get(
-          "https://eaa0-2409-40c2-600b-c9a9-5dba-f215-4047-1704.ngrok-free.app/api/getvalidcreators"
+          `https://2431-2409-40c2-25-2d6e-889d-62a2-ee57-c6c6.ngrok-free.app/api/getvalidcreators`
         );
 
         setAllCreators(creators.data.users);

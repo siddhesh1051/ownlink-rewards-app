@@ -12,8 +12,12 @@ import { Feather } from "@expo/vector-icons";
 import { Switch } from "@/components/ui/switch";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Edit } from "lucide-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Account() {
+  const navigation = useNavigation();
+
   const switchProps = {
     trackColor: { false: "#9ca3af", true: "#374151" },
     thumbColor: "#f9fafb",
@@ -23,6 +27,20 @@ export default function Account() {
     emailNotifications: true,
     pushNotifications: false,
   });
+
+  const handleLogout = async () => {
+    try {
+      // Clear storage
+      await AsyncStorage.clear();
+      // Navigate to login screen
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "index" as never }],
+      });
+    } catch (error) {
+      console.log("Error clearing storage", error);
+    }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f6f6f6", marginBottom: 70 }}>
@@ -192,6 +210,11 @@ export default function Account() {
             </View>
           </View>
 
+          {/* Logout Button */}
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+
           <Text style={styles.contentFooter}>{"\u00A9"} Ownlink</Text>
         </ScrollView>
       </View>
@@ -332,5 +355,18 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#8B8B8B",
     marginRight: 4,
+  },
+  logoutButton: {
+    marginHorizontal: 24,
+    marginVertical: 20,
+    paddingVertical: 12,
+    backgroundColor: "#000",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  logoutButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
