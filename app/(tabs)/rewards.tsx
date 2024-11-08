@@ -16,13 +16,16 @@ import { Center } from "@/components/ui/center";
 import { Icon } from "@/components/ui/icon";
 import RewardCard from "@/components/RewardCard";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalComponent from "@/components/ui/ModalComponent";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
   const [rewardsLayout, setRewardsLayout] = useState({ y: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userScratchCards, setUserScratchCards] = useState([]);
 
   const handleRedeemClick = () => {
     scrollViewRef.current?.scrollTo({
@@ -30,6 +33,30 @@ export default function Rewards() {
       animated: true,
     });
   };
+
+  useEffect(() => {
+    const getUsersScratchCards = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        console.log("User ID:", typeof userId, userId);
+        const response = await axios.get(
+          `https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/getscratchcardsbyuser/${userId}`
+        );
+
+        if (response && response.data) {
+          console.log("Scratchcards:", response.data);
+          setUserScratchCards(response.data);
+        } else {
+          console.log("Failed to get scratchcards:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error getting scratchcards:", error);
+      }
+    };
+    getUsersScratchCards();
+  }, []);
+
+  console.log("User scratchcards:", userScratchCards);
 
   return (
     <View>
@@ -72,7 +99,7 @@ export default function Rewards() {
                   className: "grid-cols-2",
                 }}
               >
-                {Array.from({ length: 4 }).map((_, index) => (
+                {userScratchCards.map((_, index) => (
                   <GridItem
                     key={index}
                     className="rounded-xl border"

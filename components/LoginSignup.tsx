@@ -34,13 +34,15 @@ const LoginSignup = ({ onLogin }: { onLogin: any }) => {
   const handleSubmit = async () => {
     try {
       const url = isLogin
-        ? "https://2431-2409-40c2-25-2d6e-889d-62a2-ee57-c6c6.ngrok-free.app/api/promoterlogin"
-        : "https://2431-2409-40c2-25-2d6e-889d-62a2-ee57-c6c6.ngrok-free.app/api/promoterregister";
+        ? "https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/promoterlogin"
+        : "https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/promoterregister";
 
       const response = await axios.post(url, { email, password });
 
       if (response.data && response.data.token) {
         await AsyncStorage.setItem("authToken", response.data.token);
+        console.log("data", response.data.promoter._id);
+        await AsyncStorage.setItem("userId", response.data.promoter._id);
         onLogin(); // Notify parent component that login was successful
         router.replace("/");
       } else {
