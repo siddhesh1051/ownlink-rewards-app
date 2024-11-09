@@ -1,27 +1,25 @@
-import React from "react";
 import {
   Modal,
   ModalBackdrop,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
 } from "./modal";
 import { CloseIcon, Icon } from "./icon";
-import { Button, ButtonText } from "./button";
-import { Text } from "./text";
-import { Heading } from "./heading";
-import { View } from "react-native";
-import { Center } from "./center";
 import AnimationScratchCard from "../AnimationScratchCard ";
+import { ScratchCard } from "@/models";
 
 const ModalComponent = ({
   isModalOpen,
   setIsModalOpen,
+  selectedScratchCard,
+  toggleRefresh,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
+  selectedScratchCard: ScratchCard | undefined;
+  toggleRefresh: () => void;
 }) => {
   return (
     <Modal
@@ -63,7 +61,11 @@ const ModalComponent = ({
         </ModalHeader>
 
         <ModalBody className="py-4">
-          <AnimationScratchCard setIsModalOpen={setIsModalOpen} />
+          <AnimationScratchCard
+            setIsModalOpen={setIsModalOpen}
+            selectedScratchCard={selectedScratchCard}
+            toggleRefresh={toggleRefresh}
+          />
         </ModalBody>
       </ModalContent>
     </Modal>

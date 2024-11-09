@@ -5,6 +5,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
 import axios from "axios";
 import { Spinner } from "@/components/ui/spinner";
+import { BACKEND_URL } from "@/utils/constants";
 
 interface Creator {
   name: string;
@@ -22,9 +23,7 @@ export default function Dashboard() {
     const getAllCreators = async () => {
       try {
         setIsAllCreatorsLoading(true);
-        const creators = await axios.get(
-          `https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/getvalidcreators`
-        );
+        const creators = await axios.get(`${BACKEND_URL}/getvalidcreators`);
 
         setAllCreators(creators.data.users);
       } catch (er: any) {

@@ -20,12 +20,17 @@ import { useEffect, useRef, useState } from "react";
 import ModalComponent from "@/components/ui/ModalComponent";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BACKEND_URL } from "@/utils/constants";
+import { ScratchCard } from "@/models";
+import ScratchCardOpened from "@/components/ScratchCardOpened";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
   const [rewardsLayout, setRewardsLayout] = useState({ y: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userScratchCards, setUserScratchCards] = useState([]);
+  const [userScratchCards, setUserScratchCards] = useState<ScratchCard[]>([]);
+  const [selectedScratchCard, setSelectedScratchCard] = useState<ScratchCard>();
+  const [refresh, setRefresh] = useState(false);
 
   const handleRedeemClick = () => {
     scrollViewRef.current?.scrollTo({
@@ -40,11 +45,10 @@ export default function Rewards() {
         const userId = await AsyncStorage.getItem("userId");
         console.log("User ID:", typeof userId, userId);
         const response = await axios.get(
-          `https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/getscratchcardsbyuser/${userId}`
+          `${BACKEND_URL}/getscratchcardsbyuser/${userId}`
         );
 
         if (response && response.data) {
-          console.log("Scratchcards:", response.data);
           setUserScratchCards(response.data);
         } else {
           console.log("Failed to get scratchcards:", response.data.message);
@@ -54,9 +58,18 @@ export default function Rewards() {
       }
     };
     getUsersScratchCards();
-  }, []);
+  }, [refresh]);
 
-  console.log("User scratchcards:", userScratchCards);
+  const handleScratchCardClick = (scratchCardId: string) => {
+    setIsModalOpen(true);
+    setSelectedScratchCard(
+      userScratchCards.find((item) => item._id === scratchCardId)
+    );
+  };
+
+  const toggleRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   return (
     <View>
@@ -99,20 +112,30 @@ export default function Rewards() {
                   className: "grid-cols-2",
                 }}
               >
-                {userScratchCards.map((_, index) => (
+                {userScratchCards.map((item, index) => (
                   <GridItem
-                    key={index}
+                    key={item._id}
                     className="rounded-xl border"
                     _extra={{
                       className: "",
                     }}
                   >
-                    <TouchableOpacity onPress={() => setIsModalOpen(true)}>
-                      <Image
-                        source={require("../../assets/scratch_foreground.png")}
-                        style={{ width: "100%", height: 150, borderRadius: 10 }}
-                      />
-                    </TouchableOpacity>
+                    {item.isRevealed ? (
+                      <ScratchCardOpened points={item.points} />
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() => handleScratchCardClick(item._id)}
+                      >
+                        <Image
+                          source={require("../../assets/scratch_foreground.png")}
+                          style={{
+                            width: "100%",
+                            height: 150,
+                            borderRadius: 10,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    )}
                   </GridItem>
                 ))}
               </Grid>
@@ -168,6 +191,8 @@ export default function Rewards() {
       <ModalComponent
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        selectedScratchCard={selectedScratchCard}
+        toggleRefresh={toggleRefresh}
       />
     </View>
   );

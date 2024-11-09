@@ -11,6 +11,10 @@ import {
   Skia,
 } from "@shopify/react-native-skia";
 import { StyleProp, View, ViewStyle, StyleSheet } from "react-native";
+import { ScratchCard as ScratchCardModel } from "@/models";
+import axios from "axios";
+import { BACKEND_URL } from "@/utils/constants";
+import Toast from "react-native-toast-message";
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -18,6 +22,9 @@ type Props = {
   children?: React.ReactNode;
   setIsModalOpen: (value: boolean) => void;
   scratchThreshold?: number; // Percentage of area that needs to be scratched (0-100)
+  selectedScratchCard: ScratchCardModel | undefined;
+  toggleRefresh: () => void;
+  setRevealedPoints: any;
 };
 
 type Point = {
@@ -30,7 +37,10 @@ export const ScratchCard: React.FC<Props> = ({
   children,
   image,
   setIsModalOpen,
-  scratchThreshold = 60, // Default to 60% if not specified
+  scratchThreshold = 50, // Default to 60% if not specified
+  selectedScratchCard,
+  toggleRefresh,
+  setRevealedPoints,
 }) => {
   const [[width, height], setSize] = useState([0, 0]);
   const [isScratched, setScratched] = useState(false);
@@ -80,14 +90,34 @@ export const ScratchCard: React.FC<Props> = ({
     return (scratchedCells / totalCells) * 100;
   };
 
+  const handleGetReward = async () => {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/openscratchcard`, {
+        scratchCardId: selectedScratchCard?._id,
+      });
+      if (response.data && response.data.message) {
+        setRevealedPoints(response.data.revealedPoints);
+      }
+    } catch (error) {
+      console.error("Error getting scratchcards:", error);
+    } finally {
+      toggleRefresh();
+    }
+  };
+
+  const handleOpenScratchCard = () => {
+    setScratched(true);
+    handleGetReward();
+    handleCloseModalAfterDelay(1000);
+  };
+
   const handleScratch = (x: number, y: number) => {
     points.current.push({ x, y });
 
     // Check coverage and trigger completion if threshold is met
     const coverage = calculateCoverage();
     if (coverage >= scratchThreshold && !isScratched) {
-      setScratched(true);
-      handleCloseModalAfterDelay(1000);
+      handleOpenScratchCard();
     }
   };
 

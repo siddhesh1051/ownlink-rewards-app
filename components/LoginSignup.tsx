@@ -9,6 +9,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import { BACKEND_URL } from "@/utils/constants";
 
 const LoginSignup = ({ onLogin }: { onLogin: any }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -34,8 +35,8 @@ const LoginSignup = ({ onLogin }: { onLogin: any }) => {
   const handleSubmit = async () => {
     try {
       const url = isLogin
-        ? "https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/promoterlogin"
-        : "https://e9a6-2409-40c2-11d-84f8-d0f9-655e-ffbd-cfad.ngrok-free.app/api/promoterregister";
+        ? `${BACKEND_URL}/promoterlogin`
+        : `${BACKEND_URL}/promoterregister`;
 
       const response = await axios.post(url, { email, password });
 
