@@ -6,11 +6,16 @@ import TabBar from "@/components/TabBar";
 import LoginSignup from "@/components/LoginSignup";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Provider } from "react-redux";
-import store from "@/context/store";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store, { RootState } from "@/context/store";
 
 export default function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const theme = useSelector((state: RootState) => state.theme.theme) as
+    | "light"
+    | "dark"
+    | "system"
+    | undefined;
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -30,56 +35,46 @@ export default function RootLayout() {
     return null;
   }
 
-  const handleLogout = async () => {
-    try {
-      // Clear storage
-      await AsyncStorage.clear();
-      // Navigate to login screen
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.log("Error clearing storage", error);
-    }
-  };
-
+  console.log(theme);
   return (
-    <Provider store={store}>
-      <GluestackUIProvider>
-        {isLoggedIn ? (
-          <Tabs tabBar={(props) => <TabBar {...props} />}>
-            <Tabs.Screen
-              name="index"
-              options={{
-                title: "Dashboard",
-                headerTitleStyle: { fontSize: 24 },
-              }}
-            />
-            <Tabs.Screen
-              name="explore"
-              options={{
-                title: "Explore",
-                headerTitleStyle: { fontSize: 24 },
-              }}
-            />
-            <Tabs.Screen
-              name="rewards"
-              options={{
-                title: "Rewards",
-                headerTitleStyle: { fontSize: 24 },
-              }}
-            />
-            <Tabs.Screen
-              name="account"
-              options={{
-                title: "Account",
-                headerTitleStyle: { fontSize: 24 },
-              }}
-            />
-          </Tabs>
-        ) : (
-          <LoginSignup onLogin={() => setIsLoggedIn(true)} />
-        )}
-        <Toast />
-      </GluestackUIProvider>
-    </Provider>
+    // <Provider store={store}>
+    <GluestackUIProvider mode={theme}>
+      {isLoggedIn ? (
+        <Tabs tabBar={(props) => <TabBar {...props} />}>
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: "Dashboard",
+              headerTitleStyle: { fontSize: 24 },
+            }}
+          />
+          <Tabs.Screen
+            name="explore"
+            options={{
+              title: "Explore",
+              headerTitleStyle: { fontSize: 24 },
+            }}
+          />
+          <Tabs.Screen
+            name="rewards"
+            options={{
+              title: "Rewards",
+              headerTitleStyle: { fontSize: 24 },
+            }}
+          />
+          <Tabs.Screen
+            name="account"
+            options={{
+              title: "Account",
+              headerTitleStyle: { fontSize: 24 },
+            }}
+          />
+        </Tabs>
+      ) : (
+        <LoginSignup onLogin={() => setIsLoggedIn(true)} />
+      )}
+      <Toast />
+    </GluestackUIProvider>
+    // </Provider>
   );
 }

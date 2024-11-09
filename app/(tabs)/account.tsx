@@ -14,9 +14,15 @@ import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Edit } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "@/context/slices/themeSlice";
+import { RootState } from "@/context/store";
+import Toast from "react-native-toast-message";
 
 export default function Account() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const theme = useSelector((state: RootState) => state.theme.theme);
 
   const switchProps = {
     trackColor: { false: "#9ca3af", true: "#374151" },
@@ -40,6 +46,16 @@ export default function Account() {
     } catch (error) {
       console.log("Error clearing storage", error);
     }
+  };
+
+  const toggleThemeFunction = () => {
+    dispatch(toggleTheme());
+    setTimeout(() => {
+      Toast.show({
+        type: "success",
+        text1: "Theme Changed",
+      });
+    }, 5000);
   };
 
   return (
@@ -106,8 +122,8 @@ export default function Account() {
 
                   <Switch
                     {...switchProps}
-                    onValueChange={(darkMode) => setForm({ ...form, darkMode })}
-                    value={form.darkMode}
+                    onValueChange={toggleThemeFunction}
+                    value={theme === "dark" ? true : false}
                   />
                 </View>
               </View>
