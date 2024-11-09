@@ -25,6 +25,8 @@ import { ScratchCard } from "@/models";
 import ScratchCardOpened from "@/components/ScratchCardOpened";
 import { useRouter } from "expo-router";
 import { Spinner } from "@/components/ui/spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "@/context/actions/userActions";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -97,6 +99,17 @@ export default function Rewards() {
   const toggleRefresh = () => {
     setRefresh(!refresh);
   };
+  const dispatch = useDispatch();
+  const { loading, userInfo, error } = useSelector(
+    (state: { user: { loading: boolean; userInfo: any; error: any } }) =>
+      state.user
+  );
+
+  useEffect(() => {
+    dispatch(fetchUserInfo("672d1484a4404c5ef2b27f38"));
+  }, [dispatch]);
+
+  console.log("userInfo", userInfo);
 
   return (
     <View>
