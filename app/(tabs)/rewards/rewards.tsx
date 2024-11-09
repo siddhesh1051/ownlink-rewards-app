@@ -26,7 +26,8 @@ import ScratchCardOpened from "@/components/ScratchCardOpened";
 import { useRouter } from "expo-router";
 import { Spinner } from "@/components/ui/spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserInfo } from "@/context/actions/userActions";
+import { AppDispatch, RootState } from "@/context/store";
+import { fetchUserInfo, getUserInfo } from "@/context/slices/userSlice";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -45,6 +46,25 @@ export default function Rewards() {
   >([]);
 
   const router = useRouter();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector(getUserInfo);
+  const status = useSelector((state: RootState) => state.user.status);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem("userId");
+        if (storedUserId) {
+          dispatch(fetchUserInfo(storedUserId)); // Pass userId to the fetch action
+        }
+      } catch (error) {
+        console.error("Error retrieving user ID from AsyncStorage:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [refresh]); // Empty dependency array ensures it's called once after the component mounts
 
   const handleRedeemClick = () => {
     scrollViewRef.current?.scrollTo({
@@ -99,15 +119,10 @@ export default function Rewards() {
   const toggleRefresh = () => {
     setRefresh(!refresh);
   };
-  const dispatch = useDispatch();
-  const { loading, userInfo, error } = useSelector(
-    (state: { user: { loading: boolean; userInfo: any; error: any } }) =>
-      state.user
-  );
 
-  useEffect(() => {
-    dispatch(fetchUserInfo("672d1484a4404c5ef2b27f38"));
-  }, [dispatch]);
+  // if (status === "loading") {
+  //   return <Spinner size="large" color="black" />;
+  // }
 
   console.log("userInfo", userInfo);
 
@@ -119,7 +134,9 @@ export default function Rewards() {
             <View className="rounded-xl bg-neutral-800 border w-full px-12 py-10 flex gap-6 justify-center items-center">
               <Text className="text-gray-300 text-lg">Reward Points</Text>
               <HStack space="md" className="items-start justify-center">
-                <Text className="text-white font-bold text-5xl">{}</Text>
+                <Text className="text-white font-bold text-5xl">
+                  {userInfo?.rewardPoints}
+                </Text>
                 <FontAwesome6 name="coins" size={32} color="white" />
               </HStack>
               <Divider className="my-0.5 bg-gray-700" />
@@ -144,9 +161,7 @@ export default function Rewards() {
             ) : (
               <View className="flex gap-4">
                 <Center>
-                  <Text className="text-gray-900 text-center text-xl font-bold">
-                    Scratch & Win
-                  </Text>
+                  <Text className="text-gray-900 text-center text-xl font-bold"></Text>
                 </Center>
 
                 <Grid
