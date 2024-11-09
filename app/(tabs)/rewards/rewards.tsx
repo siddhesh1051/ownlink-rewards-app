@@ -23,14 +23,26 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BACKEND_URL } from "@/utils/constants";
 import { ScratchCard } from "@/models";
 import ScratchCardOpened from "@/components/ScratchCardOpened";
+import { useRouter } from "expo-router";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
   const [rewardsLayout, setRewardsLayout] = useState({ y: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isScratchCardsLoading, setIsScratchCardsLoading] = useState(false);
   const [userScratchCards, setUserScratchCards] = useState<ScratchCard[]>([]);
   const [selectedScratchCard, setSelectedScratchCard] = useState<ScratchCard>();
   const [refresh, setRefresh] = useState(false);
+
+  const [reveleadScratchCards, setReveleadScratchCards] = useState<
+    ScratchCard[]
+  >([]);
+  const [notreveleadScratchCards, setNotReveleadScratchCards] = useState<
+    ScratchCard[]
+  >([]);
+
+  const router = useRouter();
 
   const handleRedeemClick = () => {
     scrollViewRef.current?.scrollTo({
@@ -41,6 +53,7 @@ export default function Rewards() {
 
   useEffect(() => {
     const getUsersScratchCards = async () => {
+      setIsScratchCardsLoading(true);
       try {
         const userId = await AsyncStorage.getItem("userId");
         console.log("User ID:", typeof userId, userId);
@@ -50,11 +63,25 @@ export default function Rewards() {
 
         if (response && response.data) {
           setUserScratchCards(response.data);
+
+          setReveleadScratchCards(
+            response.data
+              .filter((item: ScratchCard) => item.isRevealed)
+              .reverse()
+          );
+
+          setNotReveleadScratchCards(
+            response.data
+              .filter((item: ScratchCard) => !item.isRevealed)
+              .reverse()
+          );
         } else {
           console.log("Failed to get scratchcards:", response.data.message);
         }
       } catch (error) {
         console.error("Error getting scratchcards:", error);
+      } finally {
+        setIsScratchCardsLoading(false);
       }
     };
     getUsersScratchCards();
@@ -79,7 +106,7 @@ export default function Rewards() {
             <View className="rounded-xl bg-neutral-800 border w-full px-12 py-10 flex gap-6 justify-center items-center">
               <Text className="text-gray-300 text-lg">Reward Points</Text>
               <HStack space="md" className="items-start justify-center">
-                <Text className="text-white font-bold text-5xl">720</Text>
+                <Text className="text-white font-bold text-5xl">{}</Text>
                 <FontAwesome6 name="coins" size={32} color="white" />
               </HStack>
               <Divider className="my-0.5 bg-gray-700" />
@@ -99,53 +126,88 @@ export default function Rewards() {
           </View>
 
           <View style={styles.sectionParent}>
-            <View className="flex gap-4">
-              <Center>
-                <Text className="text-gray-900 text-center text-xl font-bold">
-                  Scratch & Win
-                </Text>
-              </Center>
+            {isScratchCardsLoading ? (
+              <Spinner size="large" color="black" />
+            ) : (
+              <View className="flex gap-4">
+                <Center>
+                  <Text className="text-gray-900 text-center text-xl font-bold">
+                    Scratch & Win
+                  </Text>
+                </Center>
 
-              <Grid
-                className="gap-5"
-                _extra={{
-                  className: "grid-cols-2",
-                }}
-              >
-                {userScratchCards.map((item, index) => (
-                  <GridItem
-                    key={item._id}
-                    className="rounded-xl border"
-                    _extra={{
-                      className: "",
-                    }}
-                  >
-                    {item.isRevealed ? (
-                      <ScratchCardOpened points={item.points} />
-                    ) : (
-                      <TouchableOpacity
-                        onPress={() => handleScratchCardClick(item._id)}
+                <Grid
+                  className="gap-5"
+                  _extra={{
+                    className: "grid-cols-2",
+                  }}
+                >
+                  {notreveleadScratchCards.slice(0, 4).map((item, index) => (
+                    <GridItem
+                      key={item._id}
+                      className="rounded-xl border"
+                      _extra={{
+                        className: "",
+                      }}
+                    >
+                      {item.isRevealed ? (
+                        <ScratchCardOpened points={item.points} />
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => handleScratchCardClick(item._id)}
+                        >
+                          <Image
+                            source={require("../../../assets/scratch_foreground.png")}
+                            style={{
+                              width: "100%",
+                              height: 150,
+                              borderRadius: 10,
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </GridItem>
+                  ))}
+                  {reveleadScratchCards
+                    .slice(0, 3 - notreveleadScratchCards.length)
+                    .map((item, index) => (
+                      <GridItem
+                        key={item._id}
+                        className="rounded-xl border"
+                        _extra={{
+                          className: "",
+                        }}
                       >
-                        <Image
-                          source={require("../../assets/scratch_foreground.png")}
-                          style={{
-                            width: "100%",
-                            height: 150,
-                            borderRadius: 10,
-                          }}
-                        />
-                      </TouchableOpacity>
-                    )}
-                  </GridItem>
-                ))}
-              </Grid>
-              <Center>
-                <TouchableOpacity className="flex flex-row justify-center items-center gap-1">
-                  <Text>View more</Text>
-                  <Icon as={ChevronRightIcon} />
-                </TouchableOpacity>
-              </Center>
-            </View>
+                        {item.isRevealed ? (
+                          <ScratchCardOpened points={item.points} />
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => handleScratchCardClick(item._id)}
+                          >
+                            <Image
+                              source={require("../../../assets/scratch_foreground.png")}
+                              style={{
+                                width: "100%",
+                                height: 150,
+                                borderRadius: 10,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </GridItem>
+                    ))}
+                </Grid>
+                <Center>
+                  <TouchableOpacity
+                    onPress={() => router.push("/rewards/allscratchcards")}
+                    className="flex flex-row justify-center items-center gap-1"
+                  >
+                    <Text>View more</Text>
+                    <Icon as={ChevronRightIcon} />
+                  </TouchableOpacity>
+                </Center>
+              </View>
+            )}
           </View>
 
           <View

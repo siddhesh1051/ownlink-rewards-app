@@ -21,7 +21,7 @@ const AnimationScratchCard = ({
   const image = useImage(require("../assets/scratch_foreground.png"));
 
   if (!image) {
-    return <Text style={styles.loading}>Loading...</Text>;
+    return <Spinner size="large" color="white" />;
   }
 
   return (
@@ -30,7 +30,7 @@ const AnimationScratchCard = ({
         style={styles.scratchCard}
         image={image}
         setIsModalOpen={setIsModalOpen}
-        scratchThreshold={75}
+        scratchThreshold={40}
         selectedScratchCard={selectedScratchCard}
         toggleRefresh={toggleRefresh}
         setRevealedPoints={setRevealedPoints}
@@ -47,7 +47,7 @@ const AnimationScratchCard = ({
               <FontAwesome6 name="coins" size={32} />
             </HStack>
           ) : (
-            <Spinner size="large" />
+            <Spinner size="large" color="black" />
           )}
         </View>
       </ScratchCard>

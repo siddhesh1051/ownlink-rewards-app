@@ -37,7 +37,7 @@ export const ScratchCard: React.FC<Props> = ({
   children,
   image,
   setIsModalOpen,
-  scratchThreshold = 50, // Default to 60% if not specified
+  scratchThreshold = 50,
   selectedScratchCard,
   toggleRefresh,
   setRevealedPoints,
