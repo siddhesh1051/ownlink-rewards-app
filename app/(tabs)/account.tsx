@@ -50,12 +50,11 @@ export default function Account() {
 
   const toggleThemeFunction = () => {
     dispatch(toggleTheme());
-    setTimeout(() => {
-      Toast.show({
-        type: "success",
-        text1: "Theme Changed",
-      });
-    }, 5000);
+
+    Toast.show({
+      type: "success",
+      text1: "Theme Changed",
+    });
   };
 
   return (

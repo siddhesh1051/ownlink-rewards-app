@@ -1,6 +1,6 @@
 // components/CreatorCard.tsx
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import { CheckIcon, CopyIcon, ChevronRight } from "lucide-react-native";
 import Toast from "react-native-toast-message";
 import { Avatar, AvatarFallbackText, AvatarImage } from "./ui/avatar";
@@ -22,6 +22,8 @@ export default function CreatorCard({
 }: CreatorCardProps) {
   const [isCopying, setIsCopying] = useState(false);
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(`https://ownlink.vercel.app/${username}`);
@@ -57,7 +59,13 @@ export default function CreatorCard({
             }}
           />
         </Avatar>
-        <Text className="font-medium text-lg">{name}</Text>
+        <Text
+          className={`font-medium text-lg ${
+            isDarkMode ? "text-white" : "text-black"
+          }`}
+        >
+          {name}
+        </Text>
       </TouchableOpacity>
 
       <View className="flex flex-row items-center">

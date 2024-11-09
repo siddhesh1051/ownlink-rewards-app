@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 import { ChevronRightIcon } from "lucide-react-native";
 import { Divider } from "@/components/ui/divider";
@@ -37,6 +38,8 @@ export default function Rewards() {
   const [userScratchCards, setUserScratchCards] = useState<ScratchCard[]>([]);
   const [selectedScratchCard, setSelectedScratchCard] = useState<ScratchCard>();
   const [refresh, setRefresh] = useState(false);
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
   const [reveleadScratchCards, setReveleadScratchCards] = useState<
     ScratchCard[]
@@ -129,8 +132,8 @@ export default function Rewards() {
   return (
     <View>
       <ScrollView ref={scrollViewRef}>
-        <View style={styles.parentContainer}>
-          <View style={styles.cardParent}>
+        <View style={styles(isDarkMode).parentContainer}>
+          <View style={styles(isDarkMode).cardParent}>
             <View className="rounded-xl bg-neutral-800 border w-full px-12 py-10 flex gap-6 justify-center items-center">
               <Text className="text-gray-300 text-lg">Reward Points</Text>
               <HStack space="md" className="items-start justify-center">
@@ -155,7 +158,7 @@ export default function Rewards() {
             </View>
           </View>
 
-          <View style={styles.sectionParent}>
+          <View style={styles(isDarkMode).sectionParent}>
             {isScratchCardsLoading ? (
               <Spinner size="large" color="black" />
             ) : (
@@ -239,7 +242,7 @@ export default function Rewards() {
           </View>
 
           <View
-            style={styles.sectionParent}
+            style={styles(isDarkMode).sectionParent}
             onLayout={(event) => {
               setRewardsLayout(event.nativeEvent.layout);
             }}
@@ -288,18 +291,19 @@ export default function Rewards() {
   );
 }
 
-const styles = StyleSheet.create({
-  parentContainer: {
-    marginBottom: 70,
-    paddingTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-  },
-  sectionParent: {
-    padding: 16,
-  },
-  cardParent: {
-    paddingHorizontal: 16,
-  },
-});
+const styles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    parentContainer: {
+      marginBottom: 70,
+      paddingTop: 8,
+      display: "flex",
+      flexDirection: "column",
+      gap: 8,
+    },
+    sectionParent: {
+      padding: 16,
+    },
+    cardParent: {
+      paddingHorizontal: 16,
+    },
+  });

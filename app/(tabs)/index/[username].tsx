@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  useColorScheme,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import {
   Avatar,
@@ -25,6 +31,9 @@ export default function CreatorProfile() {
   const { username, name, avatar } = useLocalSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [webViewHeight, setWebViewHeight] = useState(900); // Initial min height
+  const colorScheme = useColorScheme(); // Detect the theme
+
+  const isDarkMode = colorScheme === "dark";
 
   const handleWebViewMessage = (event: any) => {
     const { data } = event.nativeEvent;
@@ -34,6 +43,7 @@ export default function CreatorProfile() {
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(`https://ownlink.vercel.app/sid`);
   };
+
   const handleCopyOwnlink = async () => {
     await copyToClipboard();
     Toast.show({
@@ -81,11 +91,11 @@ export default function CreatorProfile() {
             </ModalCloseButton>
           </ModalHeader>
 
-          <ModalBody style={styles.modalBody}>
+          <ModalBody style={styles(isDarkMode).modalBody}>
             <View style={{ flex: 1 }}>
               <WebView
                 source={{ uri: "https://ownlink.vercel.app/sid" }}
-                style={[styles.webview, { height: webViewHeight }]}
+                style={[styles(isDarkMode).webview, { height: webViewHeight }]}
                 injectedJavaScript="
                   setTimeout(() => {
                     window.ReactNativeWebView.postMessage(
@@ -103,17 +113,17 @@ export default function CreatorProfile() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <ScrollView style={styles(isDarkMode).container}>
+      <View style={styles(isDarkMode).header}>
         <Avatar size="xl">
           <AvatarFallbackText>{name as string}</AvatarFallbackText>
           <AvatarImage source={{ uri: avatar as string }} />
         </Avatar>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.username}>@{username}</Text>
+        <Text style={styles(isDarkMode).name}>{name}</Text>
+        <Text style={styles(isDarkMode).username}>@{username}</Text>
       </View>
 
-      <View style={styles.statsContainer}>
+      <View style={styles(isDarkMode).statsContainer}>
         <HStack space="md">
           <Button
             size="lg"
@@ -140,64 +150,67 @@ export default function CreatorProfile() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    alignItems: "center",
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e3e3e3",
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 12,
-  },
-  username: {
-    fontSize: 16,
-    color: "#666",
-    marginTop: 4,
-  },
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 20,
-  },
-  statItem: {
-    alignItems: "center",
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  statLabel: {
-    fontSize: 14,
-    color: "#666",
-    marginTop: 4,
-  },
-  contentSection: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 12,
-  },
-  bio: {
-    fontSize: 16,
-    color: "#444",
-    lineHeight: 24,
-  },
-
-  modalBody: {
-    flex: 1,
-    paddingVertical: 0,
-  },
-  webview: {
-    width: "100%",
-    backgroundColor: "#4c4c4c",
-  },
-});
+const styles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+    },
+    header: {
+      alignItems: "center",
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: isDarkMode ? "#333" : "#e3e3e3",
+    },
+    name: {
+      fontSize: 24,
+      fontWeight: "bold",
+      color: isDarkMode ? "#fff" : "#000",
+      marginTop: 12,
+    },
+    username: {
+      fontSize: 16,
+      color: isDarkMode ? "#ccc" : "#666",
+      marginTop: 4,
+    },
+    statsContainer: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      paddingVertical: 20,
+    },
+    statItem: {
+      alignItems: "center",
+    },
+    statNumber: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: isDarkMode ? "#fff" : "#000",
+    },
+    statLabel: {
+      fontSize: 14,
+      color: isDarkMode ? "#ccc" : "#666",
+      marginTop: 4,
+    },
+    contentSection: {
+      padding: 20,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: "600",
+      color: isDarkMode ? "#fff" : "#000",
+      marginBottom: 12,
+    },
+    bio: {
+      fontSize: 16,
+      color: isDarkMode ? "#bbb" : "#444",
+      lineHeight: 24,
+    },
+    modalBody: {
+      flex: 1,
+      paddingVertical: 0,
+    },
+    webview: {
+      width: "100%",
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#4c4c4c",
+    },
+  });

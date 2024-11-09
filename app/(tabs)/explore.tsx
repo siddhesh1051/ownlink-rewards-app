@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
 import Creatorcard from "@/components/CreatorCard";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Search } from "lucide-react-native";
 import axios from "axios";
 import { Spinner } from "@/components/ui/spinner";
 import { BACKEND_URL } from "@/utils/constants";
+import { useSelector } from "react-redux";
 
 interface Creator {
   name: string;
@@ -18,7 +25,8 @@ export default function Home() {
   const [searchInput, setSearchInput] = useState("");
   const [isAllCreatorsLoading, setIsAllCreatorsLoading] = useState(false);
   const [allCreators, setAllCreators] = useState([]);
-
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
   useEffect(() => {
     const getAllCreators = async () => {
       try {
@@ -39,11 +47,12 @@ export default function Home() {
     <View
       style={{
         marginBottom: 70,
+        backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
       }}
       className="flex-1  pt-3 flex gap-2"
     >
       <View
-        style={styles.rowWrapper}
+        style={styles(isDarkMode).rowWrapper}
         className="flex gap-2 relative justify-center items-center px-4"
       >
         <Input
@@ -68,11 +77,11 @@ export default function Home() {
       </View>
 
       <ScrollView>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
+        <View style={styles(isDarkMode).section}>
+          <Text style={styles(isDarkMode).sectionTitle}>
             {searchInput === "" ? "All Creators" : "Results"}
           </Text>
-          <View style={styles.rowWrapper}>
+          <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
               <Spinner size="large" color={"black"} />
             ) : searchInput === "" ? (
@@ -109,31 +118,33 @@ export default function Home() {
   );
 }
 
-const styles = StyleSheet.create({
-  section: {
-    paddingTop: 8,
-  },
-  sectionTitle: {
-    marginVertical: 8,
-    marginHorizontal: 24,
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#a7a7a7",
-    textTransform: "uppercase",
-    letterSpacing: 1.2,
-  },
+const styles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    section: {
+      paddingTop: 8,
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+    },
+    sectionTitle: {
+      marginVertical: 8,
+      marginHorizontal: 24,
+      fontSize: 14,
+      fontWeight: "600",
+      color: "#a7a7a7",
+      textTransform: "uppercase",
+      letterSpacing: 1.2,
+    },
 
-  rowWrapper: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#e3e3e3",
-    backgroundColor: "#fff",
-    paddingHorizontal: 16,
-    padding: 8,
-  },
-  parentContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 2,
-  },
-});
+    rowWrapper: {
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: isDarkMode ? "#2f2f2f" : "#e3e3e3",
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+      paddingHorizontal: 16,
+      padding: 8,
+    },
+    parentContainer: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 2,
+    },
+  });

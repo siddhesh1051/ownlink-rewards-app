@@ -1,12 +1,14 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, useColorScheme } from "react-native";
 import React from "react";
 import TabBarButton from "./TabBarButton";
 
 const TabBar = ({ state, descriptors, navigation }) => {
-  const primaryColor = "#030712";
-  const greyColor = "#9ca3af";
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const primaryColor = isDarkMode ? "#cecece" : "#030712";
+  const greyColor = isDarkMode ? "#7f7f7f" : "#9ca3af";
   return (
-    <View style={styles.tabbar}>
+    <View style={styles(isDarkMode).tabbar}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -42,7 +44,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
         return (
           <TabBarButton
             key={route.name}
-            style={styles.tabbarItem}
+            style={styles(isDarkMode).tabbarItem}
             onPress={onPress}
             onLongPress={onLongPress}
             isFocused={isFocused}
@@ -56,29 +58,30 @@ const TabBar = ({ state, descriptors, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  tabbar: {
-    position: "absolute",
-    bottom: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "white",
-    marginHorizontal: 0,
-    // paddingVertical: 15,
-    height: 70,
-    width: "100%",
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderCurve: "continuous",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: -10 }, // Negative height for top shadow
-    shadowRadius: 40,
-    shadowOpacity: 0.8,
-    elevation: 10, // For Android
-  },
-});
+const styles = (isDarkMode) =>
+  StyleSheet.create({
+    tabbar: {
+      position: "absolute",
+      bottom: 0,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: isDarkMode ? "#2f2f2f" : "white",
+      marginHorizontal: 0,
+      // paddingVertical: 15,
+      height: 70,
+      width: "100%",
+      borderTopRightRadius: 20,
+      borderTopLeftRadius: 20,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderCurve: "continuous",
+      shadowColor: isDarkMode ? "white" : "black",
+      shadowOffset: { width: 0, height: -10 }, // Negative height for top shadow
+      shadowRadius: 40,
+      shadowOpacity: 0.8,
+      elevation: 10, // For Android
+    },
+  });
 
 export default TabBar;
