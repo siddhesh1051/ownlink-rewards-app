@@ -43,64 +43,60 @@ export default function RootLayout() {
   console.log(theme);
   return (
     <GluestackUIProvider mode={theme}>
-      {isLoggedIn ? (
-        <Tabs tabBar={(props) => <TabBar {...props} />}>
-          <Tabs.Screen
-            name="index"
-            options={{
-              title: "Dashboard",
-              headerTitleStyle: {
-                fontSize: 24,
-                color: isDarkMode ? "#fff" : "#000",
-              },
-              headerStyle: {
-                backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
-              },
-            }}
-          />
-          <Tabs.Screen
-            name="explore"
-            options={{
-              title: "Explore",
-              headerTitleStyle: {
-                fontSize: 24,
-                color: isDarkMode ? "#fff" : "#000",
-              },
-              headerStyle: {
-                backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
-              },
-            }}
-          />
-          <Tabs.Screen
-            name="rewards"
-            options={{
-              title: "Rewards",
-              headerTitleStyle: {
-                fontSize: 24,
-                color: isDarkMode ? "#fff" : "#000",
-              },
-              headerStyle: {
-                backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
-              },
-            }}
-          />
-          <Tabs.Screen
-            name="account"
-            options={{
-              title: "Account",
-              headerTitleStyle: {
-                fontSize: 24,
-                color: isDarkMode ? "#fff" : "#000",
-              },
-              headerStyle: {
-                backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
-              },
-            }}
-          />
-        </Tabs>
-      ) : (
-        <LoginSignup onLogin={() => setIsLoggedIn(true)} />
-      )}
+      <Tabs tabBar={(props) => <TabBar {...props} />}>
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Dashboard",
+            headerTitleStyle: {
+              fontSize: 24,
+              color: isDarkMode ? "#fff" : "#000",
+            },
+            headerStyle: {
+              backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="explore"
+          options={{
+            title: "Explore",
+            headerTitleStyle: {
+              fontSize: 24,
+              color: isDarkMode ? "#fff" : "#000",
+            },
+            headerStyle: {
+              backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="rewards"
+          options={{
+            title: "Rewards",
+            headerTitleStyle: {
+              fontSize: 24,
+              color: isDarkMode ? "#fff" : "#000",
+            },
+            headerStyle: {
+              backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="account"
+          options={{
+            title: "Account",
+            headerTitleStyle: {
+              fontSize: 24,
+              color: isDarkMode ? "#fff" : "#000",
+            },
+            headerStyle: {
+              backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
+            },
+          }}
+        />
+      </Tabs>
       <Toast />
     </GluestackUIProvider>
   );

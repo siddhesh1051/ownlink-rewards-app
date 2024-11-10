@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   ScrollView,
   Text,
@@ -13,14 +12,13 @@ import { Switch } from "@/components/ui/switch";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Edit } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "@/context/slices/themeSlice";
 import { RootState } from "@/context/store";
 import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 export default function Account() {
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   const theme = useSelector((state: RootState) => state.theme.theme);
 
@@ -39,10 +37,7 @@ export default function Account() {
       // Clear storage
       await AsyncStorage.clear();
       // Navigate to login screen
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "index" as never }],
-      });
+      router.push("authscreen");
     } catch (error) {
       console.log("Error clearing storage", error);
     }
