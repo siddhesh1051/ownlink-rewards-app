@@ -22,24 +22,6 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken");
-        setIsLoggedIn(!!token); // Set to true if token exists, false otherwise
-      } catch (error) {
-        console.error("Error checking login:", error);
-      }
-    };
-
-    checkAuthStatus();
-  }, []);
-
-  if (isLoggedIn === null) {
-    // Show a loading indicator while checking auth status
-    return null;
-  }
-
   console.log(theme);
   return (
     <GluestackUIProvider mode={theme}>

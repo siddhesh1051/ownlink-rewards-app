@@ -82,7 +82,7 @@ export default function Dashboard() {
           <Text style={styles(isDarkMode).sectionTitle}>Featured Creators</Text>
           <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
-              <Spinner size="large" color={"black"} />
+              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
             ) : allCreators?.length !== 0 ? (
               allCreators
                 .slice(0, 3)
@@ -105,7 +105,7 @@ export default function Dashboard() {
           <Text style={styles(isDarkMode).sectionTitle}>Popular Creators</Text>
           <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
-              <Spinner size="large" color={"black"} />
+              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
             ) : allCreators?.length !== 0 ? (
               allCreators
                 .slice(4, 13)

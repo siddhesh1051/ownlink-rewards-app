@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 import { ArrowLeft } from "lucide-react-native";
 
@@ -40,6 +41,9 @@ export default function Rewards() {
   >([]);
 
   const router = useRouter();
+
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
   const handleRedeemClick = () => {
     scrollViewRef.current?.scrollTo({
@@ -98,10 +102,10 @@ export default function Rewards() {
   return (
     <View>
       <ScrollView ref={scrollViewRef}>
-        <View style={styles.parentContainer}>
-          <View style={styles.sectionParent}>
+        <View style={styles(isDarkMode).parentContainer}>
+          <View style={styles(isDarkMode).sectionParent}>
             {isScratchCardsLoading ? (
-              <Spinner size="large" color="black" />
+              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
             ) : (
               <View className="flex gap-8">
                 <View className="flex justify-center items-center relative w-full">
@@ -111,7 +115,7 @@ export default function Rewards() {
                   >
                     <Icon as={ArrowLeft} size="xl" />
                   </TouchableOpacity>
-                  <Text className="text-gray-900 text-center text-xl font-bold">
+                  <Text className="text-gray-900 dark:text-gray-100 text-center text-xl font-bold">
                     Scratch & Win
                   </Text>
                 </View>
@@ -185,24 +189,27 @@ export default function Rewards() {
         setIsModalOpen={setIsModalOpen}
         selectedScratchCard={selectedScratchCard}
         toggleRefresh={toggleRefresh}
+        isDarkMode={isDarkMode}
       />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  parentContainer: {
-    marginBottom: 70,
-    paddingTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-  },
-  sectionParent: {
-    padding: 16,
-    paddingTop: 8,
-  },
-  cardParent: {
-    paddingHorizontal: 16,
-  },
-});
+const styles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    parentContainer: {
+      marginBottom: 70,
+      paddingTop: 8,
+      display: "flex",
+      flexDirection: "column",
+      gap: 12,
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#f0f0f0",
+    },
+    sectionParent: {
+      padding: 16,
+      paddingTop: 8,
+    },
+    cardParent: {
+      paddingHorizontal: 16,
+    },
+  });

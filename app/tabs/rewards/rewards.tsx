@@ -160,11 +160,13 @@ export default function Rewards() {
 
           <View style={styles(isDarkMode).sectionParent}>
             {isScratchCardsLoading ? (
-              <Spinner size="large" color="black" />
+              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
             ) : (
               <View className="flex gap-4">
                 <Center>
-                  <Text className="text-gray-900 text-center text-xl font-bold"></Text>
+                  <Text className="text-gray-900  dark:text-gray-100 text-center text-xl font-bold">
+                    Scratch & Win
+                  </Text>
                 </Center>
 
                 <Grid
@@ -230,10 +232,12 @@ export default function Rewards() {
                 </Grid>
                 <Center>
                   <TouchableOpacity
-                    onPress={() => router.push("/rewards/allscratchcards")}
+                    onPress={() => router.push("/tabs/rewards/allscratchcards")}
                     className="flex flex-row justify-center items-center gap-1"
                   >
-                    <Text>View more</Text>
+                    <Text className="text-gray-900 dark:text-gray-100">
+                      View more
+                    </Text>
                     <Icon as={ChevronRightIcon} />
                   </TouchableOpacity>
                 </Center>
@@ -249,7 +253,7 @@ export default function Rewards() {
           >
             <View className="flex gap-4">
               <Center>
-                <Text className="text-gray-900 text-center text-xl font-bold">
+                <Text className="text-gray-900 dark:text-gray-100 text-center text-xl font-bold">
                   Rewards Shop
                 </Text>
               </Center>
@@ -273,7 +277,9 @@ export default function Rewards() {
               </Grid>
               <Center>
                 <TouchableOpacity className="flex flex-row justify-center items-center gap-1">
-                  <Text>View more</Text>
+                  <Text className="text-gray-900 dark:text-gray-100">
+                    View more
+                  </Text>
                   <Icon as={ChevronRightIcon} />
                 </TouchableOpacity>
               </Center>
@@ -286,6 +292,7 @@ export default function Rewards() {
         setIsModalOpen={setIsModalOpen}
         selectedScratchCard={selectedScratchCard}
         toggleRefresh={toggleRefresh}
+        isDarkMode={isDarkMode}
       />
     </View>
   );
@@ -299,6 +306,7 @@ const styles = (isDarkMode: boolean) =>
       display: "flex",
       flexDirection: "column",
       gap: 8,
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#f0f0f0",
     },
     sectionParent: {
       padding: 16,

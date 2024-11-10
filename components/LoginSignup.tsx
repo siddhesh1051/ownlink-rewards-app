@@ -5,17 +5,19 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
 import axios from "axios";
 import { BACKEND_URL } from "@/utils/constants";
+import { router } from "expo-router";
 
-const LoginSignup = ({ onLogin }: { onLogin: any }) => {
+const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
   useEffect(() => {
     checkLogin();
@@ -25,7 +27,7 @@ const LoginSignup = ({ onLogin }: { onLogin: any }) => {
     try {
       const token = await AsyncStorage.getItem("authToken");
       if (token) {
-        router.replace("/");
+        router.push("/tabs");
       }
     } catch (error) {
       console.error("Error checking login:", error);
@@ -44,8 +46,7 @@ const LoginSignup = ({ onLogin }: { onLogin: any }) => {
         await AsyncStorage.setItem("authToken", response.data.token);
         console.log("data", response.data.promoter._id);
         await AsyncStorage.setItem("userId", response.data.promoter._id);
-        onLogin(); // Notify parent component that login was successful
-        router.replace("/");
+        router.push("/tabs");
       } else {
         console.log("Authentication failed:", response.data.message);
       }
@@ -55,39 +56,46 @@ const LoginSignup = ({ onLogin }: { onLogin: any }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{isLogin ? "Login" : "Sign Up"}</Text>
+    <View style={styles(isDarkMode).container}>
+      <View style={styles(isDarkMode).card}>
+        <View style={styles(isDarkMode).header}>
+          <Text style={styles(isDarkMode).title}>
+            {isLogin ? "Login" : "Sign Up"}
+          </Text>
         </View>
-        <View style={styles.content}>
-          <View style={styles.inputContainer}>
+        <View style={styles(isDarkMode).content}>
+          <View style={styles(isDarkMode).inputContainer}>
             <TextInput
-              style={styles.input}
+              style={styles(isDarkMode).input}
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
+              placeholderTextColor={isDarkMode ? "#aaaaaa" : "#000000"}
             />
             <TextInput
-              style={styles.input}
+              style={styles(isDarkMode).input}
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
+              placeholderTextColor={isDarkMode ? "#aaaaaa" : "#000000"}
             />
           </View>
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>
+          <TouchableOpacity
+            style={styles(isDarkMode).button}
+            onPress={handleSubmit}
+          >
+            <Text style={styles(isDarkMode).buttonText}>
               {isLogin ? "Login" : "Sign Up"}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setIsLogin((prev) => !prev)}
-            style={styles.toggleContainer}
+            style={styles(isDarkMode).toggleContainer}
           >
-            <Text style={styles.toggleText}>
+            <Text style={styles(isDarkMode).toggleText}>
               {isLogin
                 ? "Don't have an account? Sign Up"
                 : "Already have an account? Login"}
@@ -99,68 +107,73 @@ const LoginSignup = ({ onLogin }: { onLogin: any }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
-  },
-  card: {
-    width: "90%",
-    backgroundColor: "white",
-    borderRadius: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
+const styles = (isDarkMode: boolean) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: isDarkMode ? "#121212" : "#f0f0f0",
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  header: {
-    backgroundColor: "#007AFF",
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  title: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  content: {
-    padding: 16,
-  },
-  inputContainer: {
-    width: "100%",
-    marginBottom: 16,
-  },
-  input: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginVertical: 8,
-  },
-  button: {
-    backgroundColor: "#007AFF",
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 16,
-  },
-  toggleContainer: {
-    marginTop: 16,
-  },
-  toggleText: {
-    color: "#007AFF",
-  },
-});
+    card: {
+      width: "90%",
+      backgroundColor: isDarkMode ? "#1E1E1E" : "white",
+      borderRadius: 16,
+      shadowColor: isDarkMode ? "#000" : "#888",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.3,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    header: {
+      backgroundColor: isDarkMode ? "#e3e3e3" : "#1c1c1c",
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+    },
+    title: {
+      color: isDarkMode ? "black" : "white",
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+    content: {
+      padding: 16,
+    },
+    inputContainer: {
+      width: "100%",
+      marginBottom: 16,
+    },
+    input: {
+      backgroundColor: isDarkMode ? "#333333" : "#f0f0f0",
+      color: isDarkMode ? "#FFFFFF" : "#000000",
+      borderRadius: 8,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      marginVertical: 8,
+    },
+
+    button: {
+      backgroundColor: isDarkMode ? "#f0f0f0" : "#1c1c1c",
+      paddingVertical: 12,
+      borderRadius: 8,
+    },
+    buttonText: {
+      color: isDarkMode ? "black" : "white",
+      textAlign: "center",
+      fontSize: 16,
+      fontWeight: "600",
+    },
+    toggleContainer: {
+      marginTop: 16,
+    },
+    toggleText: {
+      color: isDarkMode ? "#f0f0f0" : "#1c1c1c",
+      textAlign: "center",
+    },
+  });
 
 export default LoginSignup;

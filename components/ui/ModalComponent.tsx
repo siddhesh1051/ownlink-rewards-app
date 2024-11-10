@@ -15,11 +15,13 @@ const ModalComponent = ({
   setIsModalOpen,
   selectedScratchCard,
   toggleRefresh,
+  isDarkMode,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   selectedScratchCard: ScratchCard | undefined;
   toggleRefresh: () => void;
+  isDarkMode: boolean;
 }) => {
   return (
     <Modal
@@ -55,7 +57,11 @@ const ModalComponent = ({
             <Icon
               as={CloseIcon}
               size="md"
-              className="stroke-background-50 group-hover:stroke-background-700 group-active:stroke-background-900 group-focus-visible:stroke-background-900"
+              className={`${
+                !isDarkMode
+                  ? "stroke-background-50 group-hover:stroke-background-700 group-active:stroke-background-900 group-focus-visible:stroke-background-900"
+                  : ""
+              }`}
             />
           </ModalCloseButton>
         </ModalHeader>

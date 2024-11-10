@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "@/context/store";
 import { Stack } from "expo-router";
@@ -13,13 +13,13 @@ const _layout = () => {
         }}
       >
         <Stack.Screen
-          name="authscreen"
+          name="index"
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="(tabs)"
+          name="tabs"
           options={{
             headerShown: false,
           }}

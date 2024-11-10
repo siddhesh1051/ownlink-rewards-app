@@ -83,7 +83,7 @@ export default function Home() {
           </Text>
           <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
-              <Spinner size="large" color={"black"} />
+              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
             ) : searchInput === "" ? (
               allCreators.map((creator: Creator, index) => (
                 <Creatorcard
