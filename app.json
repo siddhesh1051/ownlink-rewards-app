@@ -16,7 +16,10 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
       "package": "com.ownlink.rewards",
       "config": {
         "useCleartextTraffic": true
@@ -29,6 +32,12 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1534287b-8160-413b-9958-d4a4fde83115"
+      }
+    },
+    "owner": "siddhesh1051"
   }
 }

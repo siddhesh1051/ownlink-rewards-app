@@ -18,7 +18,7 @@ const AnimationScratchCard = ({
 }) => {
   const [revealedPoints, setRevealedPoints] = useState();
 
-  const image = useImage(require("../assets/scratch_foreground.png"));
+  const image = useImage(require("../assets/scratch_foreground.jpg"));
 
   if (!image) {
     return <Spinner size="large" color="white" />;
@@ -37,7 +37,7 @@ const AnimationScratchCard = ({
       >
         <View style={styles.card}>
           <Image
-            source={require("../assets/confetti.png")}
+            source={require("../assets/confetti.jpg")}
             style={styles.imageCard}
           />
           <Text style={styles.titleText}>You Won!</Text>

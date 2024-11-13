@@ -190,7 +190,7 @@ export default function Rewards() {
                           onPress={() => handleScratchCardClick(item._id)}
                         >
                           <Image
-                            source={require("../../../assets/scratch_foreground.png")}
+                            source={require("../../../assets/scratch_foreground.jpg")}
                             style={{
                               width: "100%",
                               height: 150,
@@ -218,7 +218,7 @@ export default function Rewards() {
                             onPress={() => handleScratchCardClick(item._id)}
                           >
                             <Image
-                              source={require("../../../assets/scratch_foreground.png")}
+                              source={require("../../../assets/scratch_foreground.jpg")}
                               style={{
                                 width: "100%",
                                 height: 150,

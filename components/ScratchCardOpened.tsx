@@ -13,7 +13,7 @@ const ScratchCardOpened = ({ points }: ScratchCardOpenedProps) => {
   return (
     <View style={styles(isDarkMode).card}>
       <Image
-        source={require("../assets/confetti.png")}
+        source={require("../assets/confetti.jpg")}
         style={styles(isDarkMode).imageCard}
       />
       <HStack space="sm" className="items-center">
