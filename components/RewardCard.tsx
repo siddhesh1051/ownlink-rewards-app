@@ -9,29 +9,44 @@ import { Text } from "./ui/text";
 import { HStack } from "./ui/hstack";
 import { FontAwesome6 } from "@expo/vector-icons";
 
-const RewardCard = () => {
+interface RewardProps {
+  isDarkMode: boolean;
+  rewardTitle: string;
+  rewardCategory: string;
+  rewardPoints: number;
+  rewardImage: string;
+}
+
+const RewardCard = ({
+  isDarkMode,
+  rewardTitle,
+  rewardCategory,
+  rewardPoints,
+  rewardImage,
+}: RewardProps) => {
   return (
     <Card className="rounded-lg max-w-[360px]">
       <Image
         source={{
-          uri: "https://www.boat-lifestyle.com/cdn/shop/products/R55050mmdrivers_2ecbed0b-a731-41db-b532-daed838c5b5d_700x.jpg?v=1659339546",
+          uri: rewardImage,
         }}
         style={styles.image}
         resizeMode="cover"
       />
-
       <Text className="text-sm font-normal mb-2 text-typography-700">
-        Electronics
+        {rewardCategory}
       </Text>
       <VStack space="sm" className="mb-6">
         <Heading size="lg" className="mb-4">
-          Boat Airdopes 131
+          {rewardTitle}
         </Heading>
-
         <HStack space="sm" className="items-center">
-          <Text size="2xl">100</Text>
-
-          <FontAwesome6 name="coins" size={22} />
+          <Text size="2xl">{rewardPoints}</Text>
+          <FontAwesome6
+            name="coins"
+            size={22}
+            color={isDarkMode ? "white" : "black"}
+          />
         </HStack>
       </VStack>
       <Box className="flex-col sm:flex-row">

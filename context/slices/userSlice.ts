@@ -4,11 +4,14 @@ import { RootState } from "../store";
 import { BACKEND_URL } from "@/utils/constants";
 
 interface UserInfo {
+  promoter: PromoterInfo;
+}
+
+interface PromoterInfo {
   id: string;
   name: string;
   email: string;
   rewardPoints: number;
-  // add other fields as necessary
 }
 
 interface UserState {

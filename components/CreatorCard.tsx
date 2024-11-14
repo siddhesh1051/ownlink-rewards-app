@@ -38,7 +38,7 @@ export default function CreatorCard({
 
   const handleNavigateToProfile = () => {
     router.push({
-      pathname: `${username}`,
+      pathname: `/tabs/${username}`,
       params: { name, avatar },
     });
   };

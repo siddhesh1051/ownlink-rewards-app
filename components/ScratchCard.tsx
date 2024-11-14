@@ -15,6 +15,7 @@ import { ScratchCard as ScratchCardModel } from "@/models";
 import axios from "axios";
 import { BACKEND_URL } from "@/utils/constants";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Props = {
   style: StyleProp<ViewStyle>;
@@ -92,8 +93,10 @@ export const ScratchCard: React.FC<Props> = ({
 
   const handleGetReward = async () => {
     try {
+      const promoterId = await AsyncStorage.getItem("userId");
       const response = await axios.post(`${BACKEND_URL}/openscratchcard`, {
         scratchCardId: selectedScratchCard?._id,
+        promoterId: "672d1484a4404c5ef2b27f38",
       });
       if (response.data && response.data.message) {
         setRevealedPoints(response.data.revealedPoints);

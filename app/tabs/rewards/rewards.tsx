@@ -54,6 +54,44 @@ export default function Rewards() {
   const userInfo = useSelector(getUserInfo);
   const status = useSelector((state: RootState) => state.user.status);
 
+  const rewardsData = [
+    {
+      rewardTitle: "Boat Airdopes 131",
+      rewardCategory: "Electronics",
+      rewardPoints: 1000,
+      rewardImage:
+        "https://www.boat-lifestyle.com/cdn/shop/products/R55050mmdrivers_2ecbed0b-a731-41db-b532-daed838c5b5d_700x.jpg?v=1659339546",
+    },
+    {
+      rewardTitle: "Amazon Gift Card - ₹100",
+      rewardCategory: "Gift Cards",
+      rewardPoints: 500,
+      rewardImage:
+        "https://m.media-amazon.com/images/G/01/gc/designs/livepreview/amzsquid_clr_noto_email_anim_v2016_us-main._CB543718275_.png",
+    },
+    {
+      rewardTitle: "Noise Pulse 2 Max Smart Watch",
+      rewardCategory: "Fitness",
+      rewardPoints: 1500,
+      rewardImage:
+        "https://m.media-amazon.com/images/I/41gBhLWS0EL._SX300_SY300_QL70_FMwebp_.jpg",
+    },
+    {
+      rewardTitle: "JBL GO3 Bluetooth Speaker",
+      rewardCategory: "Electronics",
+      rewardPoints: 3000,
+      rewardImage:
+        "https://m.media-amazon.com/images/I/31L2TB4sMRL._SX300_SY300_QL70_FMwebp_.jpg",
+    },
+    {
+      rewardTitle: "Logitech M185 Wireless Mouse",
+      rewardCategory: "Accessories",
+      rewardPoints: 2500,
+      rewardImage:
+        "https://m.media-amazon.com/images/I/61N+CzcA8vL._SX679_.jpg",
+    },
+  ];
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -81,7 +119,7 @@ export default function Rewards() {
       setIsScratchCardsLoading(true);
       try {
         const userId = await AsyncStorage.getItem("userId");
-        console.log("User ID:", typeof userId, userId);
+        console.log("User ID:", userId);
         const response = await axios.get(
           `${BACKEND_URL}/getscratchcardsbyuser/${userId}`
         );
@@ -123,12 +161,6 @@ export default function Rewards() {
     setRefresh(!refresh);
   };
 
-  // if (status === "loading") {
-  //   return <Spinner size="large" color="black" />;
-  // }
-
-  console.log("userInfo", userInfo);
-
   return (
     <View>
       <ScrollView ref={scrollViewRef}>
@@ -138,7 +170,7 @@ export default function Rewards() {
               <Text className="text-gray-300 text-lg">Reward Points</Text>
               <HStack space="md" className="items-start justify-center">
                 <Text className="text-white font-bold text-5xl">
-                  {userInfo?.rewardPoints}
+                  {userInfo?.promoter?.rewardPoints}
                 </Text>
                 <FontAwesome6 name="coins" size={32} color="white" />
               </HStack>
@@ -201,34 +233,35 @@ export default function Rewards() {
                       )}
                     </GridItem>
                   ))}
-                  {reveleadScratchCards
-                    .slice(0, 3 - notreveleadScratchCards.length)
-                    .map((item, index) => (
-                      <GridItem
-                        key={item._id}
-                        className="rounded-xl border"
-                        _extra={{
-                          className: "",
-                        }}
-                      >
-                        {item.isRevealed ? (
-                          <ScratchCardOpened points={item.points} />
-                        ) : (
-                          <TouchableOpacity
-                            onPress={() => handleScratchCardClick(item._id)}
-                          >
-                            <Image
-                              source={require("../../../assets/scratch_foreground.jpg")}
-                              style={{
-                                width: "100%",
-                                height: 150,
-                                borderRadius: 10,
-                              }}
-                            />
-                          </TouchableOpacity>
-                        )}
-                      </GridItem>
-                    ))}
+                  {notreveleadScratchCards.length < 4 &&
+                    reveleadScratchCards
+                      .slice(0, 4 - notreveleadScratchCards.length)
+                      .map((item, index) => (
+                        <GridItem
+                          key={item._id}
+                          className="rounded-xl border"
+                          _extra={{
+                            className: "",
+                          }}
+                        >
+                          {item.isRevealed ? (
+                            <ScratchCardOpened points={item.points} />
+                          ) : (
+                            <TouchableOpacity
+                              onPress={() => handleScratchCardClick(item._id)}
+                            >
+                              <Image
+                                source={require("../../../assets/scratch_foreground.jpg")}
+                                style={{
+                                  width: "100%",
+                                  height: 150,
+                                  borderRadius: 10,
+                                }}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </GridItem>
+                      ))}
                 </Grid>
                 <Center>
                   <TouchableOpacity
@@ -264,16 +297,23 @@ export default function Rewards() {
                   className: "grid-cols-1",
                 }}
               >
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <GridItem
-                    key={index}
-                    _extra={{
-                      className: "col-span-1",
-                    }}
-                  >
-                    <RewardCard />
-                  </GridItem>
-                ))}
+                {rewardsData.length > 0 &&
+                  rewardsData.map((item, index) => (
+                    <GridItem
+                      key={index}
+                      _extra={{
+                        className: "col-span-1",
+                      }}
+                    >
+                      <RewardCard
+                        isDarkMode={isDarkMode}
+                        rewardTitle={item.rewardTitle}
+                        rewardCategory={item.rewardCategory}
+                        rewardPoints={item.rewardPoints}
+                        rewardImage={item.rewardImage}
+                      />
+                    </GridItem>
+                  ))}
               </Grid>
               <Center>
                 <TouchableOpacity className="flex flex-row justify-center items-center gap-1">
