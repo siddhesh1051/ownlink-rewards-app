@@ -56,7 +56,7 @@ const ModalComponent = ({
           >
             <Icon
               as={CloseIcon}
-              size="md"
+              size="xl"
               className={`${
                 !isDarkMode
                   ? "stroke-background-50 group-hover:stroke-background-700 group-active:stroke-background-900 group-focus-visible:stroke-background-900"

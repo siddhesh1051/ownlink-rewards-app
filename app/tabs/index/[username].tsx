@@ -69,7 +69,7 @@ export default function CreatorProfile() {
           style={{
             backgroundColor: "transparent",
             borderWidth: 0,
-            flex: 1, // Make the modal content take the full height
+            flex: 0.9, // Make the modal content take the full height
           }}
         >
           <ModalHeader
@@ -85,8 +85,12 @@ export default function CreatorProfile() {
             >
               <Icon
                 as={CloseIcon}
-                size="md"
-                className="stroke-background-50 group-hover:stroke-background-700 group-active:stroke-background-900 group-focus-visible:stroke-background-900"
+                size="xl"
+                className={`${
+                  !isDarkMode
+                    ? "stroke-background-50 group-hover:stroke-background-700 group-active:stroke-background-900 group-focus-visible:stroke-background-900"
+                    : ""
+                }`}
               />
             </ModalCloseButton>
           </ModalHeader>
