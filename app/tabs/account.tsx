@@ -85,43 +85,12 @@ export default function Account() {
             <Text style={styles(isDarkMode).sectionTitle}>Preferences</Text>
 
             <View style={styles(isDarkMode).sectionBody}>
-              <View
-                style={[
-                  styles(isDarkMode).rowWrapper,
-                  styles(isDarkMode).rowFirst,
-                ]}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    // handle onPress
-                  }}
-                  style={styles(isDarkMode).row}
-                >
-                  <View
-                    style={[
-                      styles(isDarkMode).rowIcon,
-                      { backgroundColor: "#fe9400" },
-                    ]}
-                  >
-                    <Feather color="#fff" name="globe" size={20} />
-                  </View>
-
-                  <Text style={styles(isDarkMode).rowLabel}>Language</Text>
-
-                  <View style={styles(isDarkMode).rowSpacer} />
-
-                  <Text style={styles(isDarkMode).rowValue}>English</Text>
-
-                  <Feather color="#C6C6C6" name="chevron-right" size={20} />
-                </TouchableOpacity>
-              </View>
-
               <View style={styles(isDarkMode).rowWrapper}>
                 <View style={styles(isDarkMode).row}>
                   <View
                     style={[
                       styles(isDarkMode).rowIcon,
-                      { backgroundColor: "#007AFF" },
+                      { backgroundColor: "#000" },
                     ]}
                   >
                     <Feather color="#fff" name="moon" size={20} />
@@ -137,34 +106,6 @@ export default function Account() {
                     value={theme === "dark" ? true : false}
                   />
                 </View>
-              </View>
-
-              <View style={styles(isDarkMode).rowWrapper}>
-                <TouchableOpacity
-                  onPress={() => {
-                    // handle onPress
-                  }}
-                  style={styles(isDarkMode).row}
-                >
-                  <View
-                    style={[
-                      styles(isDarkMode).rowIcon,
-                      { backgroundColor: "#32c759" },
-                    ]}
-                  >
-                    <Feather color="#fff" name="navigation" size={20} />
-                  </View>
-
-                  <Text style={styles(isDarkMode).rowLabel}>Location</Text>
-
-                  <View style={styles(isDarkMode).rowSpacer} />
-
-                  <Text style={styles(isDarkMode).rowValue}>
-                    Los Angeles, CA
-                  </Text>
-
-                  <Feather color="#C6C6C6" name="chevron-right" size={20} />
-                </TouchableOpacity>
               </View>
             </View>
 
@@ -182,7 +123,7 @@ export default function Account() {
                     <View
                       style={[
                         styles(isDarkMode).rowIcon,
-                        { backgroundColor: "#38C959" },
+                        { backgroundColor: "#000" },
                       ]}
                     >
                       <Feather color="#fff" name="at-sign" size={20} />
@@ -209,7 +150,7 @@ export default function Account() {
                     <View
                       style={[
                         styles(isDarkMode).rowIcon,
-                        { backgroundColor: "#38C959" },
+                        { backgroundColor: "#000" },
                       ]}
                     >
                       <Feather color="#fff" name="bell" size={20} />
@@ -229,32 +170,6 @@ export default function Account() {
                       value={form.pushNotifications}
                     />
                   </View>
-                </View>
-
-                <View style={styles(isDarkMode).rowWrapper}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      // handle onPress
-                    }}
-                    style={styles(isDarkMode).row}
-                  >
-                    <View
-                      style={[
-                        styles(isDarkMode).rowIcon,
-                        { backgroundColor: "#FE3C30" },
-                      ]}
-                    >
-                      <Feather color="#fff" name="music" size={20} />
-                    </View>
-
-                    <Text style={styles(isDarkMode).rowLabel}>Sound</Text>
-
-                    <View style={styles(isDarkMode).rowSpacer} />
-
-                    <Text style={styles(isDarkMode).rowValue}>Default</Text>
-
-                    <Feather color="#C6C6C6" name="chevron-right" size={20} />
-                  </TouchableOpacity>
                 </View>
               </View>
             </View>
