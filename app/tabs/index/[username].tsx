@@ -41,7 +41,7 @@ export default function CreatorProfile() {
   };
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(`https://ownlink.vercel.app/sid`);
+    await Clipboard.setStringAsync(`https://ownlink.vercel.app/${username}`);
   };
 
   const handleCopyOwnlink = async () => {
@@ -98,7 +98,7 @@ export default function CreatorProfile() {
           <ModalBody style={styles(isDarkMode).modalBody}>
             <View style={{ flex: 1 }}>
               <WebView
-                source={{ uri: "https://ownlink.vercel.app/sid" }}
+                source={{ uri: `https://ownlink.vercel.app/${username}` }}
                 style={[styles(isDarkMode).webview, { height: webViewHeight }]}
                 injectedJavaScript="
                   setTimeout(() => {

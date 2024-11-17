@@ -57,7 +57,7 @@ export default function Account() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f6f6f6", marginBottom: 70 }}>
+    <View style={styles(isDarkMode).parent}>
       <View style={styles(isDarkMode).container}>
         <ScrollView>
           <View style={styles(isDarkMode).profile}>
@@ -90,10 +90,16 @@ export default function Account() {
                   <View
                     style={[
                       styles(isDarkMode).rowIcon,
-                      { backgroundColor: "#000" },
+                      isDarkMode
+                        ? { backgroundColor: "#fff" }
+                        : { backgroundColor: "#000" },
                     ]}
                   >
-                    <Feather color="#fff" name="moon" size={20} />
+                    <Feather
+                      color={isDarkMode ? "#000" : "#fff"}
+                      name="moon"
+                      size={20}
+                    />
                   </View>
 
                   <Text style={styles(isDarkMode).rowLabel}>Dark Mode</Text>
@@ -120,13 +126,12 @@ export default function Account() {
                   ]}
                 >
                   <View style={styles(isDarkMode).row}>
-                    <View
-                      style={[
-                        styles(isDarkMode).rowIcon,
-                        { backgroundColor: "#000" },
-                      ]}
-                    >
-                      <Feather color="#fff" name="at-sign" size={20} />
+                    <View style={[styles(isDarkMode).rowIcon]}>
+                      <Feather
+                        color={isDarkMode ? "#000" : "#fff"}
+                        name="at-sign"
+                        size={20}
+                      />
                     </View>
 
                     <Text style={styles(isDarkMode).rowLabel}>
@@ -147,13 +152,12 @@ export default function Account() {
 
                 <View style={styles(isDarkMode).rowWrapper}>
                   <View style={styles(isDarkMode).row}>
-                    <View
-                      style={[
-                        styles(isDarkMode).rowIcon,
-                        { backgroundColor: "#000" },
-                      ]}
-                    >
-                      <Feather color="#fff" name="bell" size={20} />
+                    <View style={[styles(isDarkMode).rowIcon]}>
+                      <Feather
+                        color={isDarkMode ? "#000" : "#fff"}
+                        name="bell"
+                        size={20}
+                      />
                     </View>
 
                     <Text style={styles(isDarkMode).rowLabel}>
@@ -194,6 +198,11 @@ export default function Account() {
 
 const styles = (isDarkMode: boolean) =>
   StyleSheet.create({
+    parent: {
+      flex: 1,
+      backgroundColor: isDarkMode ? "#1e1e1e" : "#f6f6f6",
+      paddingBottom: 70,
+    },
     container: {
       paddingTop: 24,
       paddingBottom: 8,
@@ -307,6 +316,7 @@ const styles = (isDarkMode: boolean) =>
       alignItems: "center",
       justifyContent: "center",
       marginRight: 12,
+      backgroundColor: isDarkMode ? "#f0f0f0" : "#000",
     },
     rowLabel: {
       fontSize: 17,

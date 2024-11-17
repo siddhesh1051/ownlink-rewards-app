@@ -341,7 +341,7 @@ export default function Rewards() {
 const styles = (isDarkMode: boolean) =>
   StyleSheet.create({
     parentContainer: {
-      marginBottom: 70,
+      paddingBottom: 70,
       paddingTop: 8,
       display: "flex",
       flexDirection: "column",

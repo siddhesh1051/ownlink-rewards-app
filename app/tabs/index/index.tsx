@@ -45,13 +45,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <View
-      style={{
-        marginBottom: 70,
-        backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",
-      }}
-      className="flex-1  pt-3 flex gap-2"
-    >
+    <View style={styles(isDarkMode).parent} className="flex-1  pt-3 flex gap-2">
       <View
         style={styles(isDarkMode).rowWrapper}
         className="flex gap-2 relative justify-center items-center px-4"
@@ -131,6 +125,11 @@ export default function Dashboard() {
 
 const styles = (isDarkMode: boolean) =>
   StyleSheet.create({
+    parent: {
+      flex: 1,
+      backgroundColor: isDarkMode ? "#1e1e1e" : "#f6f6f6",
+      paddingBottom: 70,
+    },
     section: {
       paddingTop: 8,
       backgroundColor: isDarkMode ? "#1c1c1c" : "#fff",

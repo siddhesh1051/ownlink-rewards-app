@@ -8,6 +8,7 @@ import { Button, ButtonText } from "./ui/button";
 import { Text } from "./ui/text";
 import { HStack } from "./ui/hstack";
 import { FontAwesome6 } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 
 interface RewardProps {
   isDarkMode: boolean;
@@ -24,6 +25,13 @@ const RewardCard = ({
   rewardPoints,
   rewardImage,
 }: RewardProps) => {
+  const handleRedeem = () => {
+    Toast.show({
+      type: "success",
+      text1: "Coming Soon",
+      text2: "This feature is under development",
+    });
+  };
   return (
     <Card className="rounded-lg max-w-[360px]">
       <Image
@@ -54,7 +62,9 @@ const RewardCard = ({
           size="md"
           className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1"
         >
-          <ButtonText size="md">Redeem</ButtonText>
+          <ButtonText onPress={() => handleRedeem()} size="md">
+            Redeem
+          </ButtonText>
         </Button>
       </Box>
     </Card>
