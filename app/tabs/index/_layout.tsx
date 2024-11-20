@@ -18,7 +18,7 @@ export default function DashboardLayout() {
           title: `${route?.params?.username}`,
           headerShown: false,
           headerTitleStyle: { fontSize: 20 },
-          presentation: "modal",
+          // presentation: "modal",
           animation: "slide_from_right",
         })}
       />
