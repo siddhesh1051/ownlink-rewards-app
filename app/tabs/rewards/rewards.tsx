@@ -29,17 +29,21 @@ import { Spinner } from "@/components/ui/spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/context/store";
 import { fetchUserInfo, getUserInfo } from "@/context/slices/userSlice";
+import OTPModal from "@/components/custom/OTPModal";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
   const [rewardsLayout, setRewardsLayout] = useState({ y: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
   const [isScratchCardsLoading, setIsScratchCardsLoading] = useState(false);
   const [userScratchCards, setUserScratchCards] = useState<ScratchCard[]>([]);
   const [selectedScratchCard, setSelectedScratchCard] = useState<ScratchCard>();
   const [refresh, setRefresh] = useState(false);
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
+  const [requiredPoints, setRequiredPoints] = useState(0);
+  const [currentOtpId, setCurrentOtpId] = useState("");
 
   const [reveleadScratchCards, setReveleadScratchCards] = useState<
     ScratchCard[]
@@ -58,35 +62,35 @@ export default function Rewards() {
     {
       rewardTitle: "Boat Airdopes 131",
       rewardCategory: "Electronics",
-      rewardPoints: 1000,
+      rewardPoints: 10,
       rewardImage:
         "https://www.boat-lifestyle.com/cdn/shop/products/R55050mmdrivers_2ecbed0b-a731-41db-b532-daed838c5b5d_700x.jpg?v=1659339546",
     },
     {
       rewardTitle: "Amazon Gift Card - ₹100",
       rewardCategory: "Gift Cards",
-      rewardPoints: 500,
+      rewardPoints: 5,
       rewardImage:
         "https://m.media-amazon.com/images/G/01/gc/designs/livepreview/amzsquid_clr_noto_email_anim_v2016_us-main._CB543718275_.png",
     },
     {
       rewardTitle: "Noise Pulse 2 Max Smart Watch",
       rewardCategory: "Fitness",
-      rewardPoints: 1500,
+      rewardPoints: 15,
       rewardImage:
         "https://m.media-amazon.com/images/I/41gBhLWS0EL._SX300_SY300_QL70_FMwebp_.jpg",
     },
     {
       rewardTitle: "JBL GO3 Bluetooth Speaker",
       rewardCategory: "Electronics",
-      rewardPoints: 3000,
+      rewardPoints: 30,
       rewardImage:
         "https://m.media-amazon.com/images/I/31L2TB4sMRL._SX300_SY300_QL70_FMwebp_.jpg",
     },
     {
       rewardTitle: "Logitech M185 Wireless Mouse",
       rewardCategory: "Accessories",
-      rewardPoints: 2500,
+      rewardPoints: 25,
       rewardImage:
         "https://m.media-amazon.com/images/I/61N+CzcA8vL._SX679_.jpg",
     },
@@ -311,6 +315,9 @@ export default function Rewards() {
                         rewardCategory={item.rewardCategory}
                         rewardPoints={item.rewardPoints}
                         rewardImage={item.rewardImage}
+                        setIsRewardModalOpen={setIsRewardModalOpen}
+                        setRequiredPoints={setRequiredPoints}
+                        setCurrentOtpId={setCurrentOtpId}
                       />
                     </GridItem>
                   ))}
@@ -333,6 +340,13 @@ export default function Rewards() {
         selectedScratchCard={selectedScratchCard}
         toggleRefresh={toggleRefresh}
         isDarkMode={isDarkMode}
+      />
+      <OTPModal
+        isModalOpen={isRewardModalOpen}
+        setIsModalOpen={setIsRewardModalOpen}
+        isDarkMode={isDarkMode}
+        requiredPoints={requiredPoints}
+        currentOtpId={currentOtpId}
       />
     </View>
   );

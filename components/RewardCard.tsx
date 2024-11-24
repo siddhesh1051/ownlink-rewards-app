@@ -8,6 +8,8 @@ import { Button, ButtonText } from "./ui/button";
 import { Text } from "./ui/text";
 import { HStack } from "./ui/hstack";
 import { FontAwesome6 } from "@expo/vector-icons";
+import axios from "axios";
+import { BACKEND_URL } from "@/utils/constants";
 import Toast from "react-native-toast-message";
 
 interface RewardProps {
@@ -16,6 +18,9 @@ interface RewardProps {
   rewardCategory: string;
   rewardPoints: number;
   rewardImage: string;
+  setIsRewardModalOpen: (value: boolean) => void;
+  setRequiredPoints: (value: number) => void;
+  setCurrentOtpId: (value: string) => void;
 }
 
 const RewardCard = ({
@@ -24,16 +29,56 @@ const RewardCard = ({
   rewardCategory,
   rewardPoints,
   rewardImage,
+  setIsRewardModalOpen,
+  setRequiredPoints,
+  setCurrentOtpId,
 }: RewardProps) => {
   const handleRedeem = () => {
-    Toast.show({
-      type: "success",
-      text1: "Coming Soon",
-      text2: "This feature is under development",
-    });
+    setIsRewardModalOpen(true);
+    sendRedeemOTP();
+  };
+
+  const sendRedeemOTP = async () => {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/sendredeemotp`, {
+        requiredPoints: rewardPoints,
+        email: "forappslogin3@gmail.com",
+      });
+      console.log("senmd staus", response.data);
+      if (response.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: response.data.message,
+        });
+        setRequiredPoints(rewardPoints);
+        setCurrentOtpId(response.data.otpId);
+      } else if (response.status === 400) {
+        setIsRewardModalOpen(false);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: response.data.message,
+        });
+      } else {
+        setIsRewardModalOpen(false);
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Redemption failed. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Redemption failed. Please try again.",
+      });
+    }
   };
   return (
-    <Card className="rounded-lg max-w-[360px]">
+    <Card className="rounded-lg max-w-full">
       <Image
         source={{
           uri: rewardImage,

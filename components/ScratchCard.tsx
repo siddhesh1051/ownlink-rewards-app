@@ -96,7 +96,7 @@ export const ScratchCard: React.FC<Props> = ({
       const promoterId = await AsyncStorage.getItem("userId");
       const response = await axios.post(`${BACKEND_URL}/openscratchcard`, {
         scratchCardId: selectedScratchCard?._id,
-        promoterId: "672d1484a4404c5ef2b27f38",
+        promoterId: await AsyncStorage.getItem("userId"),
       });
       if (response.data && response.data.message) {
         setRevealedPoints(response.data.revealedPoints);
