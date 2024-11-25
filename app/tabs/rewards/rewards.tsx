@@ -60,11 +60,11 @@ export default function Rewards() {
 
   const rewardsData = [
     {
-      rewardTitle: "Boat Airdopes 131",
+      rewardTitle: "Boat Rockerz 550",
       rewardCategory: "Electronics",
       rewardPoints: 10,
       rewardImage:
-        "https://www.boat-lifestyle.com/cdn/shop/products/R55050mmdrivers_2ecbed0b-a731-41db-b532-daed838c5b5d_700x.jpg?v=1659339546",
+        "https://m.media-amazon.com/images/I/61ljxTBpTCL._SX679_.jpg",
     },
     {
       rewardTitle: "Amazon Gift Card - ₹100",
@@ -74,11 +74,11 @@ export default function Rewards() {
         "https://m.media-amazon.com/images/G/01/gc/designs/livepreview/amzsquid_clr_noto_email_anim_v2016_us-main._CB543718275_.png",
     },
     {
-      rewardTitle: "Noise Pulse 2 Max Smart Watch",
+      rewardTitle: "Noise ColorFit 3 Smart Watch",
       rewardCategory: "Fitness",
       rewardPoints: 15,
       rewardImage:
-        "https://m.media-amazon.com/images/I/41gBhLWS0EL._SX300_SY300_QL70_FMwebp_.jpg",
+        "https://m.media-amazon.com/images/I/41O7YJM+9+L._SY300_SX300_.jpg",
     },
     {
       rewardTitle: "JBL GO3 Bluetooth Speaker",
@@ -88,11 +88,11 @@ export default function Rewards() {
         "https://m.media-amazon.com/images/I/31L2TB4sMRL._SX300_SY300_QL70_FMwebp_.jpg",
     },
     {
-      rewardTitle: "Logitech M185 Wireless Mouse",
+      rewardTitle: "Logitech G102 Gaming Mouse",
       rewardCategory: "Accessories",
       rewardPoints: 25,
       rewardImage:
-        "https://m.media-amazon.com/images/I/61N+CzcA8vL._SX679_.jpg",
+        "https://m.media-amazon.com/images/I/61RYwHoeHjL._SX679_.jpg",
     },
   ];
 

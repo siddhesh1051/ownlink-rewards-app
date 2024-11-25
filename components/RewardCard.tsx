@@ -78,21 +78,19 @@ const RewardCard = ({
     }
   };
   return (
-    <Card className="rounded-lg max-w-full">
+    <Card className="rounded-lg max-w-full border-2 border-[#E5E7EB] drop-shadow-2xl">
       <Image
         source={{
           uri: rewardImage,
         }}
         style={styles.image}
-        resizeMode="cover"
+        // resizeMode="cover"
       />
-      <Text className="text-sm font-normal mb-2 text-typography-700">
+      <Text className="text-sm font-normal mt-4 pl-1 text-typography-700">
         {rewardCategory}
       </Text>
-      <VStack space="sm" className="mb-6">
-        <Heading size="lg" className="mb-4">
-          {rewardTitle}
-        </Heading>
+      <VStack space="sm" className="mb-6 pl-1">
+        <Heading size="lg">{rewardTitle}</Heading>
         <HStack space="sm" className="items-center">
           <Text size="2xl">{rewardPoints}</Text>
           <FontAwesome6
@@ -122,7 +120,16 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 250,
+    backgroundColor: "#ffffff",
     borderRadius: 8,
     marginBottom: 4,
+    objectFit: "contain",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    shadowColor: "#000", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 0.2, // Shadow opacity
+    shadowRadius: 4, // Shadow blur radius
+    elevation: 4, // Android shadow (requires elevation for shadow effect)
   },
 });

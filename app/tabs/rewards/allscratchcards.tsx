@@ -45,13 +45,6 @@ export default function Rewards() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
 
-  const handleRedeemClick = () => {
-    scrollViewRef.current?.scrollTo({
-      y: rewardsLayout.y,
-      animated: true,
-    });
-  };
-
   useEffect(() => {
     const getUsersScratchCards = async () => {
       setIsScratchCardsLoading(true);
