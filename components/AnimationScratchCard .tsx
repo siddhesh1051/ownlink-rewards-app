@@ -6,6 +6,7 @@ import { HStack } from "./ui/hstack";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { ScratchCard as ScratchCardModel } from "@/models";
 import { Spinner } from "./ui/spinner";
+import { SkeletonText } from "./ui/skeleton";
 
 const AnimationScratchCard = ({
   setIsModalOpen,
@@ -17,6 +18,8 @@ const AnimationScratchCard = ({
   toggleRefresh: () => void;
 }) => {
   const [revealedPoints, setRevealedPoints] = useState();
+  const [isScratched, setScratched] = useState(false);
+  const [isFetchingPoints, setIsFetchingPoints] = useState(false);
 
   const image = useImage(require("../assets/scratch_foreground.jpg"));
 
@@ -34,6 +37,10 @@ const AnimationScratchCard = ({
         selectedScratchCard={selectedScratchCard}
         toggleRefresh={toggleRefresh}
         setRevealedPoints={setRevealedPoints}
+        isScratched={isScratched}
+        setScratched={setScratched}
+        isFetchingPoints={isFetchingPoints}
+        setIsFetchingPoints={setIsFetchingPoints}
       >
         <View style={styles.card}>
           <Image
@@ -46,8 +53,12 @@ const AnimationScratchCard = ({
               <Text style={styles.subTitleText}>{revealedPoints}</Text>
               <FontAwesome6 name="coins" size={32} />
             </HStack>
+          ) : isFetchingPoints ? (
+            <View className="flex flex-row justify-center items-center align-middle w-full px-4 mt-2">
+              <SkeletonText _lines={1} className="h-10 w-full" />
+            </View>
           ) : (
-            <Spinner size="large" color="black" />
+            <Text style={styles.descriptionText}>Scratch to reveal</Text>
           )}
         </View>
       </ScratchCard>
@@ -97,5 +108,11 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "black",
     fontWeight: "700",
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: "black",
+    fontWeight: "400",
+    marginTop: 8,
   },
 });

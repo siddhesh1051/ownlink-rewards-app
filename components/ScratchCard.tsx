@@ -26,6 +26,10 @@ type Props = {
   selectedScratchCard: ScratchCardModel | undefined;
   toggleRefresh: () => void;
   setRevealedPoints: any;
+  isScratched: boolean;
+  setScratched: (value: boolean) => void;
+  isFetchingPoints: boolean;
+  setIsFetchingPoints: (value: boolean) => void;
 };
 
 type Point = {
@@ -42,9 +46,13 @@ export const ScratchCard: React.FC<Props> = ({
   selectedScratchCard,
   toggleRefresh,
   setRevealedPoints,
+  isScratched,
+  setScratched,
+  isFetchingPoints,
+  setIsFetchingPoints,
 }) => {
   const [[width, height], setSize] = useState([0, 0]);
-  const [isScratched, setScratched] = useState(false);
+
   const [isMove, setMove] = useState(false);
   const path = useRef(Skia.Path.Make());
   const points = useRef<Point[]>([]);
@@ -92,8 +100,8 @@ export const ScratchCard: React.FC<Props> = ({
   };
 
   const handleGetReward = async () => {
+    setIsFetchingPoints(true);
     try {
-      const promoterId = await AsyncStorage.getItem("userId");
       const response = await axios.post(`${BACKEND_URL}/openscratchcard`, {
         scratchCardId: selectedScratchCard?._id,
         promoterId: await AsyncStorage.getItem("userId"),
@@ -104,6 +112,7 @@ export const ScratchCard: React.FC<Props> = ({
     } catch (error) {
       console.error("Error getting scratchcards:", error);
     } finally {
+      setIsFetchingPoints(false);
       toggleRefresh();
     }
   };
