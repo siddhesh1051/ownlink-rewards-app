@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/context/store";
 import { fetchUserInfo, getUserInfo } from "@/context/slices/userSlice";
 import OTPModal from "@/components/custom/OTPModal";
+import Toast from "react-native-toast-message";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -323,7 +324,15 @@ export default function Rewards() {
                   ))}
               </Grid>
               <Center>
-                <TouchableOpacity className="flex flex-row justify-center items-center gap-1">
+                <TouchableOpacity
+                  onPress={() => {
+                    Toast.show({
+                      type: "info",
+                      text1: "Coming soon!",
+                    });
+                  }}
+                  className="flex flex-row justify-center items-center gap-1"
+                >
                   <Text className="text-gray-900 dark:text-gray-100">
                     View more
                   </Text>
@@ -347,6 +356,7 @@ export default function Rewards() {
         isDarkMode={isDarkMode}
         requiredPoints={requiredPoints}
         currentOtpId={currentOtpId}
+        toggleRefresh={toggleRefresh}
       />
     </View>
   );

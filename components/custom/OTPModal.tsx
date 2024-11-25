@@ -18,12 +18,14 @@ const OTPModal = ({
   isDarkMode,
   requiredPoints,
   currentOtpId,
+  toggleRefresh,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   isDarkMode: boolean;
   requiredPoints: number;
   currentOtpId: string;
+  toggleRefresh: () => void;
 }) => {
   const inputRefs = [
     useRef<TextInput>(null),
@@ -76,6 +78,7 @@ const OTPModal = ({
       if (response.status === 200) {
         setIsModalOpen(false);
         setOtp(["", "", "", ""]);
+        toggleRefresh();
         Toast.show({
           type: "success",
           text1: "Success",
@@ -227,6 +230,15 @@ const OTPModal = ({
                 Resend
               </Text>
             </View>
+            <View style={styles.errorDescription}>
+              <Text
+                style={{
+                  color: "red",
+                }}
+              >
+                {error && "Invalid OTP. Please try again."}
+              </Text>
+            </View>
           </ModalBody>
         </ModalContent>
       </Animated.View>
@@ -258,6 +270,15 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 16,
     textAlign: "center",
+  },
+  errorDescription: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 8,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   resendBtn: {
     marginLeft: 4,
