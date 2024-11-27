@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "@/context/store";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const _layout = () => {
+  // Regular app layout
   return (
     <Provider store={store}>
       <Stack
@@ -17,6 +19,14 @@ const _layout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            headerShown: false,
+          }}
+        />
+
         <Stack.Screen
           name="tabs"
           options={{
