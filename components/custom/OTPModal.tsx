@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, StyleSheet, Text, TextInput, View } from "react-native";
 import axios from "axios";
 import Toast from "react-native-toast-message";
@@ -211,8 +211,17 @@ const OTPModal = ({
                     },
                   ]}
                   maxLength={1}
-                  keyboardType="number-pad"
                   onChangeText={(text) => handleTextChange(text, index)}
+                  selectTextOnFocus={false}
+                  onKeyPress={({ nativeEvent }) => {
+                    console.log("key", nativeEvent);
+                    if (nativeEvent.key === "Backspace") {
+                      const prevIndex = index - 1;
+                      if (prevIndex >= 0) {
+                        inputRefs[prevIndex].current?.focus();
+                      }
+                    }
+                  }}
                 />
               ))}
             </View>
