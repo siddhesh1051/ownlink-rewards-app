@@ -63,35 +63,35 @@ export default function Rewards() {
     {
       rewardTitle: "Boat Rockerz 550",
       rewardCategory: "Electronics",
-      rewardPoints: 10,
+      rewardPoints: 200,
       rewardImage:
         "https://m.media-amazon.com/images/I/61ljxTBpTCL._SX679_.jpg",
     },
     {
       rewardTitle: "Amazon Gift Card - ₹100",
       rewardCategory: "Gift Cards",
-      rewardPoints: 5,
+      rewardPoints: 50,
       rewardImage:
         "https://m.media-amazon.com/images/G/01/gc/designs/livepreview/amzsquid_clr_noto_email_anim_v2016_us-main._CB543718275_.png",
     },
     {
       rewardTitle: "Noise ColorFit 3 Smart Watch",
       rewardCategory: "Fitness",
-      rewardPoints: 15,
+      rewardPoints: 150,
       rewardImage:
         "https://m.media-amazon.com/images/I/41O7YJM+9+L._SY300_SX300_.jpg",
     },
     {
       rewardTitle: "JBL GO3 Bluetooth Speaker",
       rewardCategory: "Electronics",
-      rewardPoints: 30,
+      rewardPoints: 300,
       rewardImage:
         "https://m.media-amazon.com/images/I/31L2TB4sMRL._SX300_SY300_QL70_FMwebp_.jpg",
     },
     {
       rewardTitle: "Logitech G102 Gaming Mouse",
       rewardCategory: "Accessories",
-      rewardPoints: 25,
+      rewardPoints: 250,
       rewardImage:
         "https://m.media-amazon.com/images/I/61RYwHoeHjL._SX679_.jpg",
     },

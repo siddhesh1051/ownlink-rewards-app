@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,14 +6,19 @@ import {
   FlatList,
   TouchableOpacity,
   useColorScheme,
+  ActivityIndicator,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Icon } from "@/components/ui/icon";
 import { ArrowLeft } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import axios from "axios"; // Import axios for making the API request
+import { Spinner } from "@/components/ui/spinner";
+import { BACKEND_URL } from "@/utils/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Transaction {
-  id: string;
+  _id: string;
   points: number;
   transactionType: "credit" | "debit";
   date: string;
@@ -24,13 +29,40 @@ const TransactionHistory = () => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
 
-  // Dummy transaction data
-  const transactions: Transaction[] = [
-    { id: "1", points: 50, transactionType: "credit", date: "2024-11-29" },
-    { id: "2", points: 30, transactionType: "debit", date: "2024-11-28" },
-    { id: "3", points: 100, transactionType: "credit", date: "2024-11-27" },
-    { id: "4", points: 20, transactionType: "debit", date: "2024-11-26" },
-  ];
+  // State to hold transactions data, loading state, and any errors
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+
+  console.log(
+    "TransactionHistory.tsx: Fetching transactions...",
+    transactions[0]
+  );
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (!userId) {
+          console.log("No userId found in AsyncStorage.");
+          return;
+        }
+
+        // Send userId as a URL parameter
+        const response = await axios.get(
+          `${BACKEND_URL}/gettransactionsforuser?userId=${userId}`
+        );
+
+        setTransactions(response.data.transactions); // Set the transactions data
+        setLoading(false); // Set loading to false after data is fetched
+      } catch (err) {
+        setError("Failed to fetch transactions. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
 
   const renderTransaction = ({ item }: { item: Transaction }) => (
     <View style={styles(isDarkMode).transactionItem}>
@@ -72,6 +104,47 @@ const TransactionHistory = () => {
     </View>
   );
 
+  // Loading and error handling UI
+  if (loading) {
+    return (
+      <View style={styles(isDarkMode).container}>
+        <View className="flex justify-center items-center relative w-full mb-4">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="absolute left-0 p-2 active::bg-white rounded-full"
+          >
+            <Icon as={ArrowLeft} size="xl" />
+          </TouchableOpacity>
+          <Text className="text-gray-900 dark:text-gray-100 text-center text-xl font-bold">
+            Transaction History
+          </Text>
+        </View>
+        <ActivityIndicator size="large" color={isDarkMode ? "#fff" : "#000"} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles(isDarkMode).container}>
+        <View className="flex justify-center items-center relative w-full mb-4">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="absolute left-0 p-2 active::bg-white rounded-full"
+          >
+            <Icon as={ArrowLeft} size="xl" />
+          </TouchableOpacity>
+          <Text className="text-gray-900 dark:text-gray-100 text-center text-xl font-bold">
+            Transaction History
+          </Text>
+        </View>
+        <Text style={{ color: isDarkMode ? "#fff" : "#000", marginTop: 20 }}>
+          {error}
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles(isDarkMode).container}>
       <View className="flex justify-center items-center relative w-full mb-4">
@@ -87,8 +160,10 @@ const TransactionHistory = () => {
       </View>
       <FlatList
         data={transactions}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={renderTransaction}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
