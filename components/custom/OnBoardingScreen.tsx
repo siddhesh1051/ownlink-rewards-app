@@ -21,20 +21,20 @@ const slides = [
   {
     id: "1",
     image: require("../../assets/images/image1.png"),
-    title: "Best Digital Solution",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Discover Creators",
+    subtitle: "Explore your favourite creators and their content.",
   },
   {
     id: "2",
-    image: require("../../assets/images/image2.png"),
-    title: "Achieve Your Goals",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    image: require("../../assets/images/image3.png"),
+    title: "Share and Earn",
+    subtitle: "Promote creators by sharing their link-in-bio and earn rewards.",
   },
   {
     id: "3",
-    image: require("../../assets/images/image3.png"),
-    title: "Increase Your Value",
-    subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    image: require("../../assets/images/image2.png"),
+    title: "Scratch and Redeem",
+    subtitle: "Scratch cards to earn points and redeem exciting goodies.",
   },
 ];
 

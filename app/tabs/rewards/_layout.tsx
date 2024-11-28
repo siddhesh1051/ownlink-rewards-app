@@ -16,6 +16,12 @@ const Layout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="transactionhistory"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

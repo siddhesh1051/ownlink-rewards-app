@@ -190,7 +190,20 @@ export default function Rewards() {
                     Redeem
                   </ButtonText>
                 </Button>
-                <Text className="text-gray-300 text-sm">See Transactions</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push("/tabs/rewards/transactionhistory")
+                  }
+                  className="flex flex-row justify-center items-center gap-1"
+                >
+                  <Text className="text-gray-300 text-sm">
+                    See Transactions
+                  </Text>
+                  <Icon
+                    as={ChevronRightIcon}
+                    className="text-gray-300 text-sm"
+                  />
+                </TouchableOpacity>
               </VStack>
             </View>
           </View>
