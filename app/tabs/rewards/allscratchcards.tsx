@@ -24,6 +24,7 @@ import ScratchCardOpened from "@/components/ScratchCardOpened";
 import { useRouter } from "expo-router";
 import { HStack } from "@/components/ui/hstack";
 import { Spinner } from "@/components/ui/spinner";
+import ScratchCardSkeleton from "@/components/skeletons/ScratchCardSkeleton";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -121,30 +122,29 @@ export default function Rewards() {
       >
         <View style={styles(isDarkMode).parentContainer}>
           <View style={styles(isDarkMode).sectionParent}>
-            {isScratchCardsLoading ? (
-              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
-            ) : (
-              <View className="flex gap-8">
-                <View className="flex justify-center items-center relative w-full">
-                  <TouchableOpacity
-                    onPress={() => router.back()}
-                    className="absolute left-0 p-2 active::bg-white rounded-full"
-                  >
-                    <Icon as={ArrowLeft} size="xl" />
-                  </TouchableOpacity>
-                  <Text className="text-gray-900 dark:text-gray-100 text-center text-xl font-bold">
-                    Scratch & Win
-                  </Text>
-                </View>
+            <View className="flex gap-8">
+              <View className="flex justify-center items-center relative w-full">
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  className="absolute left-0 p-2 active::bg-white rounded-full"
+                >
+                  <Icon as={ArrowLeft} size="xl" />
+                </TouchableOpacity>
+                <Text className="text-gray-900 dark:text-gray-100 text-center text-xl font-bold">
+                  Scratch & Win
+                </Text>
+              </View>
 
-                {reveleadScratchCards.length === 0 &&
-                notreveleadScratchCards.length === 0 ? (
-                  <Center>
-                    <Text className="text-gray-900 dark:text-gray-100 text-center text-sm font-normal">
-                      No scratch cards available
-                    </Text>
-                  </Center>
-                ) : (
+              {reveleadScratchCards.length === 0 &&
+              notreveleadScratchCards.length === 0 &&
+              !isScratchCardsLoading ? (
+                <Center>
+                  <Text className="text-gray-900 dark:text-gray-100 text-center text-sm font-normal">
+                    No scratch cards available
+                  </Text>
+                </Center>
+              ) : (
+                !isScratchCardsLoading && (
                   <Grid
                     className="gap-5"
                     _extra={{
@@ -204,9 +204,29 @@ export default function Rewards() {
                       </GridItem>
                     ))}
                   </Grid>
-                )}
-              </View>
-            )}
+                )
+              )}
+              {isScratchCardsLoading && (
+                <Grid
+                  className="gap-5"
+                  _extra={{
+                    className: "grid-cols-2",
+                  }}
+                >
+                  {Array.from({ length: 2 }).map((_, index) => (
+                    <GridItem
+                      key={index}
+                      className="rounded-xl"
+                      _extra={{
+                        className: "",
+                      }}
+                    >
+                      <ScratchCardSkeleton />
+                    </GridItem>
+                  ))}
+                </Grid>
+              )}
+            </View>
           </View>
         </View>
       </ScrollView>

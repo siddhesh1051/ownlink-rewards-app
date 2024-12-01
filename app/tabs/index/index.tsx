@@ -13,6 +13,7 @@ import { Search } from "lucide-react-native";
 import axios from "axios";
 import { Spinner } from "@/components/ui/spinner";
 import { BACKEND_URL } from "@/utils/constants";
+import CreatorCardSkeleton from "@/components/skeletons/CreatorCardSkeleton";
 
 interface Creator {
   name: string;
@@ -76,7 +77,9 @@ export default function Dashboard() {
           <Text style={styles(isDarkMode).sectionTitle}>Featured Creators</Text>
           <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
-              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
+              Array.from({ length: 3 }).map((_, index) => (
+                <CreatorCardSkeleton key={index} />
+              ))
             ) : allCreators?.length !== 0 ? (
               allCreators
                 .slice(0, 3)
@@ -99,7 +102,9 @@ export default function Dashboard() {
           <Text style={styles(isDarkMode).sectionTitle}>Popular Creators</Text>
           <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
-              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
+              Array.from({ length: 8 }).map((_, index) => (
+                <CreatorCardSkeleton key={index} />
+              ))
             ) : allCreators?.length !== 0 ? (
               allCreators
                 .slice(4, 13)

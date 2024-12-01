@@ -32,6 +32,7 @@ import { AppDispatch, RootState } from "@/context/store";
 import { fetchUserInfo, getUserInfo } from "@/context/slices/userSlice";
 import OTPModal from "@/components/custom/OTPModal";
 import Toast from "react-native-toast-message";
+import ScratchCardSkeleton from "@/components/skeletons/ScratchCardSkeleton";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -226,24 +227,23 @@ export default function Rewards() {
           </View>
 
           <View style={styles(isDarkMode).sectionParent}>
-            {isScratchCardsLoading ? (
-              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
-            ) : (
-              <View className="flex gap-4">
+            <View className="flex gap-4">
+              <Center>
+                <Text className="text-gray-900  dark:text-gray-100 text-center text-xl font-bold">
+                  Scratch & Win
+                </Text>
+              </Center>
+
+              {reveleadScratchCards.length === 0 &&
+              notreveleadScratchCards.length === 0 &&
+              !isScratchCardsLoading ? (
                 <Center>
-                  <Text className="text-gray-900  dark:text-gray-100 text-center text-xl font-bold">
-                    Scratch & Win
+                  <Text className="text-gray-900 dark:text-gray-100 text-center text-sm font-light">
+                    No scratch cards available
                   </Text>
                 </Center>
-
-                {reveleadScratchCards.length === 0 &&
-                notreveleadScratchCards.length === 0 ? (
-                  <Center>
-                    <Text className="text-gray-900 dark:text-gray-100 text-center text-sm font-light">
-                      No scratch cards available
-                    </Text>
-                  </Center>
-                ) : (
+              ) : (
+                !isScratchCardsLoading && (
                   <Grid
                     className="gap-5"
                     _extra={{
@@ -306,8 +306,10 @@ export default function Rewards() {
                           </GridItem>
                         ))}
                   </Grid>
-                )}
-                {reveleadScratchCards.length == 0 &&
+                )
+              )}
+              {!isScratchCardsLoading ? (
+                reveleadScratchCards.length == 0 &&
                 notreveleadScratchCards.length === 0 ? null : (
                   <Center>
                     <TouchableOpacity
@@ -322,9 +324,29 @@ export default function Rewards() {
                       <Icon as={ChevronRightIcon} />
                     </TouchableOpacity>
                   </Center>
-                )}
-              </View>
-            )}
+                )
+              ) : null}
+              {isScratchCardsLoading && (
+                <Grid
+                  className="gap-5"
+                  _extra={{
+                    className: "grid-cols-2",
+                  }}
+                >
+                  {Array.from({ length: 2 }).map((_, index) => (
+                    <GridItem
+                      key={index}
+                      className="rounded-xl"
+                      _extra={{
+                        className: "",
+                      }}
+                    >
+                      <ScratchCardSkeleton />
+                    </GridItem>
+                  ))}
+                </Grid>
+              )}
+            </View>
           </View>
 
           <View

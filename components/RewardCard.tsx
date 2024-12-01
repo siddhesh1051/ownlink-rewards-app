@@ -78,7 +78,7 @@ const RewardCard = ({
     }
   };
   return (
-    <Card className="rounded-lg max-w-full border-2 border-[#E5E7EB] drop-shadow-2xl">
+    <Card className="rounded-lg max-w-full border-2 border-[#E5E7EB] dark:border-[#272727] drop-shadow-2xl">
       <Image
         source={{
           uri: rewardImage,

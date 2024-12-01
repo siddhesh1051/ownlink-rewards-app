@@ -13,6 +13,7 @@ import axios from "axios";
 import { Spinner } from "@/components/ui/spinner";
 import { BACKEND_URL } from "@/utils/constants";
 import { useSelector } from "react-redux";
+import CreatorCardSkeleton from "@/components/skeletons/CreatorCardSkeleton";
 
 interface Creator {
   name: string;
@@ -77,7 +78,10 @@ export default function Home() {
           </Text>
           <View style={styles(isDarkMode).rowWrapper}>
             {isAllCreatorsLoading ? (
-              <Spinner size="large" color={isDarkMode ? "white" : "black"} />
+              // <Spinner size="large" color={isDarkMode ? "white" : "black"} />
+              Array.from({ length: 10 }).map((_, index) => (
+                <CreatorCardSkeleton key={index} />
+              ))
             ) : searchInput === "" ? (
               allCreators.map((creator: Creator, index) => (
                 <Creatorcard
