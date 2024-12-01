@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   useColorScheme,
+  RefreshControl,
 } from "react-native";
 import { ArrowLeft } from "lucide-react-native";
 
@@ -26,6 +27,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
   const [rewardsLayout, setRewardsLayout] = useState({ y: 0 });
   const [isScratchCardsLoading, setIsScratchCardsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,19 +47,23 @@ export default function Rewards() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
 
-  useEffect(() => {
-    const getUsersScratchCards = async () => {
-      setIsScratchCardsLoading(true);
-      try {
-        const userId = await AsyncStorage.getItem("userId");
-        console.log("User ID:", typeof userId, userId);
-        const response = await axios.get(
-          `${BACKEND_URL}/getscratchcardsbyuser/${userId}`
-        );
+  const getUsersScratchCards = async () => {
+    setIsScratchCardsLoading(true);
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const response = await axios.get(
+        `${BACKEND_URL}/getscratchcardsbyuser/${userId}`
+      );
 
-        if (response && response.data) {
-          setUserScratchCards(response.data);
+      console.log("response", response.data);
+      if (response && Array.isArray(response.data)) {
+        setUserScratchCards(response.data);
 
+        if (response.data.length === 0) {
+          // No scratch cards available
+          setReveleadScratchCards([]);
+          setNotReveleadScratchCards([]);
+        } else {
           setReveleadScratchCards(
             response.data
               .filter((item: ScratchCard) => item.isRevealed)
@@ -69,15 +75,19 @@ export default function Rewards() {
               .filter((item: ScratchCard) => !item.isRevealed)
               .reverse()
           );
-        } else {
-          console.log("Failed to get scratchcards:", response.data.message);
         }
-      } catch (error) {
-        console.error("Error getting scratchcards:", error);
-      } finally {
-        setIsScratchCardsLoading(false);
+      } else {
+        console.log("Unexpected response:", response);
       }
-    };
+    } catch (error) {
+      console.error("Error getting scratchcards:", error);
+    } finally {
+      setIsScratchCardsLoading(false);
+      setIsRefreshing(false); // Stop refresh indicator
+    }
+  };
+
+  useEffect(() => {
     getUsersScratchCards();
   }, [refresh]);
 
@@ -92,9 +102,23 @@ export default function Rewards() {
     setRefresh(!refresh);
   };
 
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    getUsersScratchCards();
+  };
+
   return (
-    <View>
-      <ScrollView ref={scrollViewRef}>
+    <View style={styles(isDarkMode).view}>
+      <ScrollView
+        ref={scrollViewRef}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor={isDarkMode ? "white" : "black"}
+          />
+        }
+      >
         <View style={styles(isDarkMode).parentContainer}>
           <View style={styles(isDarkMode).sectionParent}>
             {isScratchCardsLoading ? (
@@ -113,65 +137,74 @@ export default function Rewards() {
                   </Text>
                 </View>
 
-                <Grid
-                  className="gap-5"
-                  _extra={{
-                    className: "grid-cols-2",
-                  }}
-                >
-                  {notreveleadScratchCards.map((item, index) => (
-                    <GridItem
-                      key={item._id}
-                      className="rounded-xl border"
-                      _extra={{
-                        className: "",
-                      }}
-                    >
-                      {item.isRevealed ? (
-                        <ScratchCardOpened points={item.points} />
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() => handleScratchCardClick(item._id)}
-                        >
-                          <Image
-                            source={require("../../../assets/scratch_foreground.jpg")}
-                            style={{
-                              width: "100%",
-                              height: 150,
-                              borderRadius: 10,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </GridItem>
-                  ))}
-                  {reveleadScratchCards.map((item, index) => (
-                    <GridItem
-                      key={item._id}
-                      className="rounded-xl border"
-                      _extra={{
-                        className: "",
-                      }}
-                    >
-                      {item.isRevealed ? (
-                        <ScratchCardOpened points={item.points} />
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() => handleScratchCardClick(item._id)}
-                        >
-                          <Image
-                            source={require("../../../assets/scratch_foreground.jpg")}
-                            style={{
-                              width: "100%",
-                              height: 150,
-                              borderRadius: 10,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </GridItem>
-                  ))}
-                </Grid>
+                {reveleadScratchCards.length === 0 &&
+                notreveleadScratchCards.length === 0 ? (
+                  <Center>
+                    <Text className="text-gray-900 dark:text-gray-100 text-center text-sm font-normal">
+                      No scratch cards available
+                    </Text>
+                  </Center>
+                ) : (
+                  <Grid
+                    className="gap-5"
+                    _extra={{
+                      className: "grid-cols-2",
+                    }}
+                  >
+                    {notreveleadScratchCards.map((item, index) => (
+                      <GridItem
+                        key={item._id}
+                        className="rounded-xl border"
+                        _extra={{
+                          className: "",
+                        }}
+                      >
+                        {item.isRevealed ? (
+                          <ScratchCardOpened points={item.points} />
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => handleScratchCardClick(item._id)}
+                          >
+                            <Image
+                              source={require("../../../assets/scratch_foreground.jpg")}
+                              style={{
+                                width: "100%",
+                                height: 150,
+                                borderRadius: 10,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </GridItem>
+                    ))}
+                    {reveleadScratchCards.map((item, index) => (
+                      <GridItem
+                        key={item._id}
+                        className="rounded-xl border"
+                        _extra={{
+                          className: "",
+                        }}
+                      >
+                        {item.isRevealed ? (
+                          <ScratchCardOpened points={item.points} />
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => handleScratchCardClick(item._id)}
+                          >
+                            <Image
+                              source={require("../../../assets/scratch_foreground.jpg")}
+                              style={{
+                                width: "100%",
+                                height: 150,
+                                borderRadius: 10,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </GridItem>
+                    ))}
+                  </Grid>
+                )}
               </View>
             )}
           </View>
@@ -190,7 +223,12 @@ export default function Rewards() {
 
 const styles = (isDarkMode: boolean) =>
   StyleSheet.create({
+    view: {
+      flex: 1,
+      backgroundColor: isDarkMode ? "#1c1c1c" : "#f0f0f0",
+    },
     parentContainer: {
+      minHeight: "100%",
       paddingBottom: 70,
       paddingTop: 8,
       display: "flex",

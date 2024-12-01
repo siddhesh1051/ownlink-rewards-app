@@ -175,6 +175,7 @@ const styles = (isDarkMode: boolean) =>
       flex: 1,
       backgroundColor: isDarkMode ? "#1c1c1c" : "#f0f0f0", // Dark background for dark mode
       padding: 16,
+      paddingBottom: 70,
     },
     header: {
       fontSize: 20,

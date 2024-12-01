@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   useColorScheme,
+  RefreshControl,
 } from "react-native";
 import { ChevronRightIcon } from "lucide-react-native";
 import { Divider } from "@/components/ui/divider";
@@ -35,6 +36,7 @@ import Toast from "react-native-toast-message";
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
   const [rewardsLayout, setRewardsLayout] = useState({ y: 0 });
+  const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
   const [isScratchCardsLoading, setIsScratchCardsLoading] = useState(false);
@@ -107,6 +109,7 @@ export default function Rewards() {
       } catch (error) {
         console.error("Error retrieving user ID from AsyncStorage:", error);
       }
+      setIsRefreshing(false); // Stop refresh indicator
     };
 
     fetchUserData();
@@ -166,9 +169,23 @@ export default function Rewards() {
     setRefresh(!refresh);
   };
 
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    toggleRefresh();
+  };
+
   return (
     <View>
-      <ScrollView ref={scrollViewRef}>
+      <ScrollView
+        ref={scrollViewRef}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor={isDarkMode ? "white" : "black"}
+          />
+        }
+      >
         <View style={styles(isDarkMode).parentContainer}>
           <View style={styles(isDarkMode).cardParent}>
             <View className="rounded-xl bg-neutral-800 border w-full px-12 py-10 flex gap-6 justify-center items-center">
@@ -219,79 +236,93 @@ export default function Rewards() {
                   </Text>
                 </Center>
 
-                <Grid
-                  className="gap-5"
-                  _extra={{
-                    className: "grid-cols-2",
-                  }}
-                >
-                  {notreveleadScratchCards.slice(0, 4).map((item, index) => (
-                    <GridItem
-                      key={item._id}
-                      className="rounded-xl border"
-                      _extra={{
-                        className: "",
-                      }}
-                    >
-                      {item.isRevealed ? (
-                        <ScratchCardOpened points={item.points} />
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() => handleScratchCardClick(item._id)}
-                        >
-                          <Image
-                            source={require("../../../assets/scratch_foreground.jpg")}
-                            style={{
-                              width: "100%",
-                              height: 150,
-                              borderRadius: 10,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </GridItem>
-                  ))}
-                  {notreveleadScratchCards.length < 4 &&
-                    reveleadScratchCards
-                      .slice(0, 4 - notreveleadScratchCards.length)
-                      .map((item, index) => (
-                        <GridItem
-                          key={item._id}
-                          className="rounded-xl border"
-                          _extra={{
-                            className: "",
-                          }}
-                        >
-                          {item.isRevealed ? (
-                            <ScratchCardOpened points={item.points} />
-                          ) : (
-                            <TouchableOpacity
-                              onPress={() => handleScratchCardClick(item._id)}
-                            >
-                              <Image
-                                source={require("../../../assets/scratch_foreground.jpg")}
-                                style={{
-                                  width: "100%",
-                                  height: 150,
-                                  borderRadius: 10,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          )}
-                        </GridItem>
-                      ))}
-                </Grid>
-                <Center>
-                  <TouchableOpacity
-                    onPress={() => router.push("/tabs/rewards/allscratchcards")}
-                    className="flex flex-row justify-center items-center gap-1"
-                  >
-                    <Text className="text-gray-900 dark:text-gray-100">
-                      View more
+                {reveleadScratchCards.length === 0 &&
+                notreveleadScratchCards.length === 0 ? (
+                  <Center>
+                    <Text className="text-gray-900 dark:text-gray-100 text-center text-sm font-light">
+                      No scratch cards available
                     </Text>
-                    <Icon as={ChevronRightIcon} />
-                  </TouchableOpacity>
-                </Center>
+                  </Center>
+                ) : (
+                  <Grid
+                    className="gap-5"
+                    _extra={{
+                      className: "grid-cols-2",
+                    }}
+                  >
+                    {notreveleadScratchCards.slice(0, 4).map((item, index) => (
+                      <GridItem
+                        key={item._id}
+                        className="rounded-xl border"
+                        _extra={{
+                          className: "",
+                        }}
+                      >
+                        {item.isRevealed ? (
+                          <ScratchCardOpened points={item.points} />
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => handleScratchCardClick(item._id)}
+                          >
+                            <Image
+                              source={require("../../../assets/scratch_foreground.jpg")}
+                              style={{
+                                width: "100%",
+                                height: 150,
+                                borderRadius: 10,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </GridItem>
+                    ))}
+                    {notreveleadScratchCards.length < 4 &&
+                      reveleadScratchCards
+                        .slice(0, 4 - notreveleadScratchCards.length)
+                        .map((item, index) => (
+                          <GridItem
+                            key={item._id}
+                            className="rounded-xl border"
+                            _extra={{
+                              className: "",
+                            }}
+                          >
+                            {item.isRevealed ? (
+                              <ScratchCardOpened points={item.points} />
+                            ) : (
+                              <TouchableOpacity
+                                onPress={() => handleScratchCardClick(item._id)}
+                              >
+                                <Image
+                                  source={require("../../../assets/scratch_foreground.jpg")}
+                                  style={{
+                                    width: "100%",
+                                    height: 150,
+                                    borderRadius: 10,
+                                  }}
+                                />
+                              </TouchableOpacity>
+                            )}
+                          </GridItem>
+                        ))}
+                  </Grid>
+                )}
+                {reveleadScratchCards.length == 0 &&
+                notreveleadScratchCards.length === 0 ? null : (
+                  <Center>
+                    <TouchableOpacity
+                      onPress={() =>
+                        router.push("/tabs/rewards/allscratchcards")
+                      }
+                      className="flex flex-row justify-center items-center gap-1"
+                    >
+                      <Text className="text-gray-900 dark:text-gray-100">
+                        View more
+                      </Text>
+                      <Icon as={ChevronRightIcon} />
+                    </TouchableOpacity>
+                  </Center>
+                )}
               </View>
             )}
           </View>
