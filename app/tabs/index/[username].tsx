@@ -26,6 +26,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import Toast from "react-native-toast-message";
 import * as Clipboard from "expo-clipboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CreatorProfile() {
   const { username, name, avatar } = useLocalSearchParams();
@@ -41,7 +42,10 @@ export default function CreatorProfile() {
   };
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(`https://ownlink.vercel.app/${username}`);
+    const reffererId = await AsyncStorage.getItem("userId");
+    await Clipboard.setStringAsync(
+      `https://ownlink.vercel.app/${username}?ref_id=${reffererId}`
+    );
   };
 
   const handleCopyOwnlink = async () => {

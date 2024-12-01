@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipText } from "./ui/tooltip";
 import { Icon } from "./ui/icon";
 import { useRouter } from "expo-router";
 import * as Clipboard from "expo-clipboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface CreatorCardProps {
   name: string;
@@ -26,7 +27,11 @@ export default function CreatorCard({
   const isDarkMode = colorScheme === "dark";
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(`https://ownlink.vercel.app/${username}`);
+    const reffererId = await AsyncStorage.getItem("userId");
+
+    await Clipboard.setStringAsync(
+      `https://ownlink.vercel.app/${username}?ref_id=${reffererId}`
+    );
   };
 
   const copyOwnlink = async () => {
