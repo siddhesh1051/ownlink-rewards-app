@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { BACKEND_URL } from "@/utils/constants";
 import { router } from "expo-router";
+import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotifications";
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -40,7 +41,8 @@ const LoginSignup = () => {
         ? `${BACKEND_URL}/promoterlogin`
         : `${BACKEND_URL}/promoterregister`;
 
-      const response = await axios.post(url, { email, password });
+      const deviceToken = await registerForPushNotificationsAsync();
+      const response = await axios.post(url, { email, password, deviceToken });
 
       if (response.data && response.data.token) {
         await AsyncStorage.setItem("authToken", response.data.token);
