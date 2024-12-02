@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Provider } from "react-redux";
 import store from "@/context/store";
 import { Redirect, Stack } from "expo-router";
@@ -7,6 +7,14 @@ import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotifi
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BACKEND_URL } from "@/utils/constants";
 import axios from "axios";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const _layout = () => {
   const saveTokenToUserDocument = async (token: string | undefined) => {
@@ -25,29 +33,36 @@ const _layout = () => {
       console.log("Error saving token to user document:", error);
     }
   };
+
+  const notificationListener = useRef<Notifications.Subscription>();
+  const responseListener = useRef<Notifications.Subscription>();
   useEffect(() => {
     // Register for push notifications
-    registerForPushNotificationsAsync().then((token) => {
-      console.log("Push Token:", token);
-
-      saveTokenToUserDocument(token);
+    registerForPushNotificationsAsync().then(async (token) => {
+      console.log("saved Push notification token:", token);
+      await saveTokenToUserDocument(token).catch((error) =>
+        console.log("Error saving token to user document:", error)
+      );
     });
 
     // Notification listeners
-    const notificationListener = Notifications.addNotificationReceivedListener(
-      (notification) => {
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
         console.log("Notification received:", notification);
-      }
-    );
+      });
 
-    const responseListener =
+    responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log("Notification tapped:", response);
       });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
   return (

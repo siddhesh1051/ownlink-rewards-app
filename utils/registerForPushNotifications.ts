@@ -19,7 +19,7 @@ export async function registerForPushNotificationsAsync() {
     return;
   }
 
-  token = (await Notifications.getDevicePushTokenAsync()).data;
+  token = (await Notifications.getExpoPushTokenAsync()).data;
 
   // Save the token to AsyncStorage (optional)
   await AsyncStorage.setItem("expoPushToken", token);
