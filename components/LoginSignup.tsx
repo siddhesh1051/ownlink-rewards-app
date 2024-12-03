@@ -57,7 +57,7 @@ const LoginSignup = () => {
         console.log("Authentication failed:", response.data.message);
       }
     } catch (error) {
-      alert("Error during login/signup");
+      alert(error);
       console.error("Error during login/signup:", error);
     }
   };
