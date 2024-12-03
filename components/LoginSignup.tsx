@@ -43,6 +43,7 @@ const LoginSignup = () => {
 
       const deviceToken = await registerForPushNotificationsAsync();
       const response = await axios.post(url, { email, password, deviceToken });
+      alert(response.data);
 
       if (response.data && response.data.token) {
         await AsyncStorage.setItem("authToken", response.data.token);
@@ -50,9 +51,13 @@ const LoginSignup = () => {
         await AsyncStorage.setItem("userId", response.data.promoter._id);
         router.push("/tabs");
       } else {
+        alert(response.data.message);
+        alert(deviceToken);
+
         console.log("Authentication failed:", response.data.message);
       }
     } catch (error) {
+      alert("Error during login/signup");
       console.error("Error during login/signup:", error);
     }
   };

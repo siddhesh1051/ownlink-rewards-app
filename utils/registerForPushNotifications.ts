@@ -23,6 +23,7 @@ export async function registerForPushNotificationsAsync() {
 
   // Save the token to AsyncStorage (optional)
   await AsyncStorage.setItem("expoPushToken", token);
+  alert(token);
   console.log("Push notification token:", token);
   // }
   // else {
