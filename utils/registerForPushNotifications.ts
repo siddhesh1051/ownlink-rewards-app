@@ -19,7 +19,11 @@ export async function registerForPushNotificationsAsync() {
     return;
   }
 
-  token = (await Notifications.getExpoPushTokenAsync()).data;
+  token = (
+    await Notifications.getExpoPushTokenAsync({
+      projectId: "1534287b-8160-413b-9958-d4a4fde83115",
+    })
+  ).data;
 
   // Save the token to AsyncStorage (optional)
   await AsyncStorage.setItem("expoPushToken", token);
