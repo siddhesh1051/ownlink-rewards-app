@@ -16,10 +16,7 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": [
-        "INTERNET",
-        "ACCESS_NETWORK_STATE"
-      ],
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
       "package": "com.ownlink.rewards",
       "config": {
         "useCleartextTraffic": true
@@ -27,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",

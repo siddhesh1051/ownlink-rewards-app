@@ -34,3 +34,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+google-services.json
+ownlink-rewards-firebase-adminsdk-1411n-89131ea306.json
