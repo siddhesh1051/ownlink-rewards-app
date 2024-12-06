@@ -30,7 +30,7 @@ export default function CreatorCard({
     const reffererId = await AsyncStorage.getItem("userId");
 
     await Clipboard.setStringAsync(
-      `https://ownlink.vercel.app/${username}?ref_id=${reffererId}`
+      `https://ownlink.live/${username}?ref_id=${reffererId}`
     );
   };
 

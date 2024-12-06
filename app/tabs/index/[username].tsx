@@ -44,7 +44,7 @@ export default function CreatorProfile() {
   const copyToClipboard = async () => {
     const reffererId = await AsyncStorage.getItem("userId");
     await Clipboard.setStringAsync(
-      `https://ownlink.vercel.app/${username}?ref_id=${reffererId}`
+      `https://ownlink.live/${username}?ref_id=${reffererId}`
     );
   };
 
@@ -102,7 +102,7 @@ export default function CreatorProfile() {
           <ModalBody style={styles(isDarkMode).modalBody}>
             <View style={{ flex: 1 }}>
               <WebView
-                source={{ uri: `https://ownlink.vercel.app/${username}` }}
+                source={{ uri: `https://ownlink.live/${username}` }}
                 style={[styles(isDarkMode).webview, { height: webViewHeight }]}
                 injectedJavaScript="
                   setTimeout(() => {
