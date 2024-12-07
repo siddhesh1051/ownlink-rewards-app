@@ -26,6 +26,7 @@
     "@gluestack-ui/pressable": "^0.1.16",
     "@gluestack-ui/spinner": "^0.1.14",
     "@gluestack-ui/switch": "^0.1.22",
+    "@gluestack-ui/toast": "^1.0.8",
     "@gluestack-ui/tooltip": "^0.1.33",
     "@legendapp/motion": "^2.4.0",
     "@react-native-async-storage/async-storage": "^2.1.0",
