@@ -7,6 +7,7 @@ import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotifi
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BACKEND_URL } from "@/utils/constants";
 import axios from "axios";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -67,34 +68,36 @@ const _layout = () => {
     };
   }, []);
   return (
-    <Provider store={store}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
+    <ThemeProvider>
+      <Provider store={store}>
+        <Stack
+          screenOptions={{
             headerShown: false,
           }}
-        />
+        >
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          name="onboarding"
-          options={{
-            headerShown: false,
-          }}
-        />
+          <Stack.Screen
+            name="onboarding"
+            options={{
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          name="tabs"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-    </Provider>
+          <Stack.Screen
+            name="tabs"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </Provider>
+    </ThemeProvider>
   );
 };
 

@@ -1,10 +1,11 @@
 import { View, StyleSheet, useColorScheme } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import TabBarButton from "./TabBarButton";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const TabBar = ({ state, descriptors, navigation }) => {
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
   const primaryColor = isDarkMode ? "#cecece" : "#030712";
   const greyColor = isDarkMode ? "#7f7f7f" : "#9ca3af";
   return (
@@ -76,8 +77,7 @@ const styles = (isDarkMode) =>
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
       borderCurve: "continuous",
-      shadowColor: isDarkMode ? "white" : "black",
-      shadowOffset: { width: 0, height: -10 }, // Negative height for top shadow
+      shadowOffset: { width: 0, height: -20 }, // Negative height for top shadow
       shadowRadius: 40,
       shadowOpacity: 0.8,
       elevation: 10, // For Android

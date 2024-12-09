@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import axios from "axios";
 import { Spinner } from "@/components/ui/spinner";
 import { BACKEND_URL } from "@/utils/constants";
 import CreatorCardSkeleton from "@/components/skeletons/CreatorCardSkeleton";
+import { ThemeContext } from "@/context/ThemeContext";
 
 interface Creator {
   name: string;
@@ -26,8 +27,8 @@ export default function Dashboard() {
   const [searchInput, setSearchInput] = useState("");
   const [isAllCreatorsLoading, setIsAllCreatorsLoading] = useState(false);
   const [allCreators, setAllCreators] = useState([]);
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   useEffect(() => {
     const getAllCreators = async () => {

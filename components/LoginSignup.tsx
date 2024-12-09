@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -12,13 +12,14 @@ import axios from "axios";
 import { BACKEND_URL } from "@/utils/constants";
 import { router } from "expo-router";
 import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotifications";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   useEffect(() => {
     checkLogin();

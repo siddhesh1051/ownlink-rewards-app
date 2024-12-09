@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import axios from "axios"; // Import axios for making the API request
 import { Spinner } from "@/components/ui/spinner";
 import { BACKEND_URL } from "@/utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "@/context/ThemeContext";
 
 interface Transaction {
   _id: string;
@@ -26,8 +27,8 @@ interface Transaction {
 
 const TransactionHistory = () => {
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   // State to hold transactions data, loading state, and any errors
   const [transactions, setTransactions] = useState<Transaction[]>([]);

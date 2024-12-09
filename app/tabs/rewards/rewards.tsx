@@ -18,7 +18,7 @@ import { Center } from "@/components/ui/center";
 import { Icon } from "@/components/ui/icon";
 import RewardCard from "@/components/RewardCard";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ModalComponent from "@/components/ui/ModalComponent";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -33,6 +33,7 @@ import { fetchUserInfo, getUserInfo } from "@/context/slices/userSlice";
 import OTPModal from "@/components/custom/OTPModal";
 import Toast from "react-native-toast-message";
 import ScratchCardSkeleton from "@/components/skeletons/ScratchCardSkeleton";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -44,8 +45,6 @@ export default function Rewards() {
   const [userScratchCards, setUserScratchCards] = useState<ScratchCard[]>([]);
   const [selectedScratchCard, setSelectedScratchCard] = useState<ScratchCard>();
   const [refresh, setRefresh] = useState(false);
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
   const [requiredPoints, setRequiredPoints] = useState(0);
   const [currentOtpId, setCurrentOtpId] = useState("");
 
@@ -55,6 +54,9 @@ export default function Rewards() {
   const [notreveleadScratchCards, setNotReveleadScratchCards] = useState<
     ScratchCard[]
   >([]);
+
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   const router = useRouter();
 

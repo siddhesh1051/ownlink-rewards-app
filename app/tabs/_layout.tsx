@@ -3,21 +3,13 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
 import Toast from "react-native-toast-message";
 import TabBar from "@/components/TabBar";
-import { useSelector } from "react-redux";
-import { RootState } from "@/context/store";
-import { useColorScheme } from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function RootLayout() {
-  const theme = useSelector((state: RootState) => state.theme.theme) as
-    | "light"
-    | "dark"
-    | "system"
-    | undefined;
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
-
-  console.log(theme);
   return (
     <GluestackUIProvider mode={theme}>
       <Tabs tabBar={(props) => <TabBar {...props} />}>

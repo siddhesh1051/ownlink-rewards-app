@@ -12,7 +12,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import WebView from "react-native-webview";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Modal,
   ModalBackdrop,
@@ -27,14 +27,14 @@ import { HStack } from "@/components/ui/hstack";
 import Toast from "react-native-toast-message";
 import * as Clipboard from "expo-clipboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function CreatorProfile() {
   const { username, name, avatar } = useLocalSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [webViewHeight, setWebViewHeight] = useState(900); // Initial min height
-  const colorScheme = useColorScheme(); // Detect the theme
-
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   const handleWebViewMessage = (event: any) => {
     const { data } = event.nativeEvent;

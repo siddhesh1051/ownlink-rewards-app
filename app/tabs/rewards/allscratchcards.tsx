@@ -14,7 +14,7 @@ import { Grid, GridItem } from "@/components/ui/grid";
 import { Center } from "@/components/ui/center";
 import { Icon } from "@/components/ui/icon";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ModalComponent from "@/components/ui/ModalComponent";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -25,6 +25,7 @@ import { useRouter } from "expo-router";
 import { HStack } from "@/components/ui/hstack";
 import { Spinner } from "@/components/ui/spinner";
 import ScratchCardSkeleton from "@/components/skeletons/ScratchCardSkeleton";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function Rewards() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -45,8 +46,8 @@ export default function Rewards() {
 
   const router = useRouter();
 
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   const getUsersScratchCards = async () => {
     setIsScratchCardsLoading(true);

@@ -1,5 +1,5 @@
 // components/CreatorCard.tsx
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import { CheckIcon, CopyIcon, ChevronRight } from "lucide-react-native";
 import Toast from "react-native-toast-message";
@@ -9,6 +9,7 @@ import { Icon } from "./ui/icon";
 import { useRouter } from "expo-router";
 import * as Clipboard from "expo-clipboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "@/context/ThemeContext";
 
 interface CreatorCardProps {
   name: string;
@@ -23,8 +24,8 @@ export default function CreatorCard({
 }: CreatorCardProps) {
   const [isCopying, setIsCopying] = useState(false);
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   const copyToClipboard = async () => {
     const reffererId = await AsyncStorage.getItem("userId");

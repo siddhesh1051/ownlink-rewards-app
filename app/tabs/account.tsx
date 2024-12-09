@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,25 +6,19 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  useColorScheme,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Switch } from "@/components/ui/switch";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Edit } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "@/context/slices/themeSlice";
-import { RootState } from "@/context/store";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function Account() {
-  const dispatch = useDispatch();
-  const theme = useSelector((state: RootState) => state.theme.theme);
-
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
 
   const switchProps = {
     trackColor: { false: "#9ca3af", true: "#374151" },
@@ -47,9 +41,8 @@ export default function Account() {
     }
   };
 
-  const toggleThemeFunction = () => {
-    dispatch(toggleTheme());
-
+  const toggleThemeFunction = async () => {
+    await toggleTheme();
     Toast.show({
       type: "success",
       text1: "Theme Changed",
@@ -109,7 +102,7 @@ export default function Account() {
                   <Switch
                     {...switchProps}
                     onValueChange={toggleThemeFunction}
-                    value={theme === "dark" ? true : false}
+                    value={isDarkMode}
                   />
                 </View>
               </View>

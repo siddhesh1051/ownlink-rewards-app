@@ -1,15 +1,16 @@
 import { View, Text, StyleSheet, Image, useColorScheme } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { HStack } from "./ui/hstack";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { ThemeContext } from "@/context/ThemeContext";
 
 interface ScratchCardOpenedProps {
   points: number;
 }
 
 const ScratchCardOpened = ({ points }: ScratchCardOpenedProps) => {
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === "dark";
   return (
     <View style={styles(isDarkMode).card}>
       <Image
