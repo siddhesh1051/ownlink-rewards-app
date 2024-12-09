@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BACKEND_URL } from "@/utils/constants";
 import axios from "axios";
 import { ThemeProvider } from "@/context/ThemeContext";
+import Toast from "react-native-toast-message";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -96,6 +97,7 @@ const _layout = () => {
             }}
           />
         </Stack>
+        <Toast />
       </Provider>
     </ThemeProvider>
   );

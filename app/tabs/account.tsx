@@ -33,7 +33,9 @@ export default function Account() {
   const handleLogout = async () => {
     try {
       // Clear storage
-      await AsyncStorage.clear();
+      await AsyncStorage.setItem("userId", "");
+      await AsyncStorage.setItem("authToken", "");
+      await AsyncStorage.setItem("isAppFirstLaunched", "true");
       // Navigate to login screen
       router.push("/");
     } catch (error) {

@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   useColorScheme,
+  ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -13,9 +14,11 @@ import { BACKEND_URL } from "@/utils/constants";
 import { router } from "expo-router";
 import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotifications";
 import { ThemeContext } from "@/context/ThemeContext";
+import Toast from "react-native-toast-message";
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { theme } = useContext(ThemeContext);
@@ -38,6 +41,7 @@ const LoginSignup = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       const url = isLogin
         ? `${BACKEND_URL}/promoterlogin`
         : `${BACKEND_URL}/promoterregister`;
@@ -54,7 +58,13 @@ const LoginSignup = () => {
         console.log("Authentication failed:", response.data.message);
       }
     } catch (error) {
-      console.error("Error during login/signup:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong. Please try again later.",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,9 +100,16 @@ const LoginSignup = () => {
             style={styles(isDarkMode).button}
             onPress={handleSubmit}
           >
-            <Text style={styles(isDarkMode).buttonText}>
-              {isLogin ? "Login" : "Sign Up"}
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator
+                size="small"
+                color={isDarkMode ? "black" : "white"}
+              />
+            ) : (
+              <Text style={styles(isDarkMode).buttonText}>
+                {isLogin ? "Login" : "Sign Up"}
+              </Text>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setIsLogin((prev) => !prev)}
