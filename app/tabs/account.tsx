@@ -158,16 +158,6 @@ export default function Account() {
             <Text style={styles(isDarkMode).profileEmail}>
               {userInfo?.promoter?.email}
             </Text>
-            <Text style={styles(isDarkMode).profileEmail}>
-              isPushNotificationEnabled:
-              {userInfo?.promoter?.isPushNotificationEnabled ? "true" : "false"}
-            </Text>
-            <Text style={styles(isDarkMode).profileEmail}>
-              isEmailNotificationEnabled:{" "}
-              {userInfo?.promoter?.isEmailNotificationEnabled
-                ? "true"
-                : "false"}
-            </Text>
 
             <Button className="mt-4">
               <ButtonText>Edit Profile</ButtonText>
