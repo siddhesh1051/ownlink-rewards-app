@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -15,10 +15,37 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 import { ThemeContext } from "@/context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/context/store";
+import { fetchUserInfo, getUserInfo } from "@/context/slices/userSlice";
+import { BACKEND_URL } from "@/utils/constants";
+import axios from "axios";
 
 export default function Account() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const isDarkMode = theme === "dark";
+
+  // const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
+  // const [refresh, setRefresh] = useState(false); // State for pull-to-refresh
+
+  const dispatch = useDispatch<AppDispatch>();
+  const userInfo = useSelector(getUserInfo);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem("userId");
+        if (storedUserId) {
+          dispatch(fetchUserInfo(storedUserId)); // Pass userId to the fetch action
+        }
+      } catch (error) {
+        console.error("Error retrieving user ID from AsyncStorage:", error);
+      }
+      // setIsRefreshing(false); // Stop refresh indicator
+    };
+
+    fetchUserData();
+  }, []);
 
   const switchProps = {
     trackColor: { false: "#9ca3af", true: "#374151" },
@@ -27,7 +54,7 @@ export default function Account() {
   const [form, setForm] = useState({
     darkMode: false,
     emailNotifications: true,
-    pushNotifications: false,
+    pushNotifications: true,
   });
 
   const handleLogout = async () => {
@@ -35,7 +62,6 @@ export default function Account() {
       // Clear storage
       await AsyncStorage.setItem("userId", "");
       await AsyncStorage.setItem("authToken", "");
-      await AsyncStorage.setItem("isAppFirstLaunched", "true");
       // Navigate to login screen
       router.push("/");
     } catch (error) {
@@ -49,6 +75,69 @@ export default function Account() {
       type: "success",
       text1: "Theme Changed",
     });
+  };
+
+  const togglePushNotifications = async (pushNotifications: boolean) => {
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        pushNotifications,
+      }));
+
+      const response = await axios.post(
+        `${BACKEND_URL}/updatepushnotificationpreference`, // Replace with your API URL
+        {
+          promoterId: userId, // Assuming userInfo has the promoter ID
+          isPushNotificationEnabled: pushNotifications,
+        }
+      );
+
+      if (response.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: response.data.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating push notifications:", error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to Update Push Notifications",
+      });
+    }
+  };
+
+  const toggleEmailNotifications = async (emailNotifications: boolean) => {
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      setForm((prevForm) => ({
+        ...prevForm,
+        emailNotifications,
+      }));
+
+      const response = await axios.post(
+        `${BACKEND_URL}/updateemailpreference`, // Replace with your API URL
+        {
+          promoterId: userId,
+          isEmailNotificationEnabled: emailNotifications,
+        }
+      );
+
+      if (response.status === 200) {
+        Toast.show({
+          type: "success",
+          text1: response.data.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating email notifications:", error);
+      Toast.show({
+        type: "error",
+        text1: "Failed to Update Email Notifications",
+      });
+    }
   };
 
   return (
@@ -67,7 +156,17 @@ export default function Account() {
             <Text style={styles(isDarkMode).profileName}>John Doe</Text>
 
             <Text style={styles(isDarkMode).profileEmail}>
-              john.doe@mail.com
+              {userInfo?.promoter?.email}
+            </Text>
+            <Text style={styles(isDarkMode).profileEmail}>
+              isPushNotificationEnabled:
+              {userInfo?.promoter?.isPushNotificationEnabled ? "true" : "false"}
+            </Text>
+            <Text style={styles(isDarkMode).profileEmail}>
+              isEmailNotificationEnabled:{" "}
+              {userInfo?.promoter?.isEmailNotificationEnabled
+                ? "true"
+                : "false"}
             </Text>
 
             <Button className="mt-4">
@@ -114,6 +213,31 @@ export default function Account() {
               <Text style={styles(isDarkMode).sectionTitle}>Notifications</Text>
 
               <View style={styles(isDarkMode).sectionBody}>
+                <View style={styles(isDarkMode).rowWrapper}>
+                  <View style={styles(isDarkMode).row}>
+                    <View style={[styles(isDarkMode).rowIcon]}>
+                      <Feather
+                        color={isDarkMode ? "#000" : "#fff"}
+                        name="bell"
+                        size={20}
+                      />
+                    </View>
+
+                    <Text style={styles(isDarkMode).rowLabel}>
+                      Push Notifications
+                    </Text>
+
+                    <View style={styles(isDarkMode).rowSpacer} />
+
+                    <Switch
+                      {...switchProps}
+                      onValueChange={(pushNotifications) =>
+                        togglePushNotifications(pushNotifications)
+                      }
+                      value={form.pushNotifications}
+                    />
+                  </View>
+                </View>
                 <View
                   style={[
                     styles(isDarkMode).rowWrapper,
@@ -138,35 +262,9 @@ export default function Account() {
                     <Switch
                       {...switchProps}
                       onValueChange={(emailNotifications) =>
-                        setForm({ ...form, emailNotifications })
+                        toggleEmailNotifications(emailNotifications)
                       }
                       value={form.emailNotifications}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles(isDarkMode).rowWrapper}>
-                  <View style={styles(isDarkMode).row}>
-                    <View style={[styles(isDarkMode).rowIcon]}>
-                      <Feather
-                        color={isDarkMode ? "#000" : "#fff"}
-                        name="bell"
-                        size={20}
-                      />
-                    </View>
-
-                    <Text style={styles(isDarkMode).rowLabel}>
-                      Push Notifications
-                    </Text>
-
-                    <View style={styles(isDarkMode).rowSpacer} />
-
-                    <Switch
-                      {...switchProps}
-                      onValueChange={(pushNotifications) =>
-                        setForm({ ...form, pushNotifications })
-                      }
-                      value={form.pushNotifications}
                     />
                   </View>
                 </View>

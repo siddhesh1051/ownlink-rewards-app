@@ -12,6 +12,8 @@ interface PromoterInfo {
   name: string;
   email: string;
   rewardPoints: number;
+  isPushNotificationEnabled: boolean;
+  isEmailNotificationEnabled: boolean;
 }
 
 interface UserState {

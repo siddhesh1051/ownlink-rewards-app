@@ -62,7 +62,6 @@ export default function Rewards() {
 
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector(getUserInfo);
-  const status = useSelector((state: RootState) => state.user.status);
 
   const rewardsData = [
     {
