@@ -25,6 +25,12 @@ export default function Account() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const isDarkMode = theme === "dark";
 
+  const [form, setForm] = useState({
+    darkMode: false,
+    emailNotifications: true,
+    pushNotifications: true,
+  });
+
   // const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
   // const [refresh, setRefresh] = useState(false); // State for pull-to-refresh
 
@@ -47,15 +53,19 @@ export default function Account() {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    setForm({
+      darkMode: isDarkMode,
+      emailNotifications:
+        userInfo?.promoter?.isEmailNotificationEnabled ?? true,
+      pushNotifications: userInfo?.promoter?.isPushNotificationEnabled ?? true,
+    });
+  }, [userInfo, isDarkMode]);
+
   const switchProps = {
     trackColor: { false: "#9ca3af", true: "#374151" },
     thumbColor: "#f9fafb",
   };
-  const [form, setForm] = useState({
-    darkMode: false,
-    emailNotifications: true,
-    pushNotifications: true,
-  });
 
   const handleLogout = async () => {
     try {
